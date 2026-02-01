@@ -35,7 +35,7 @@ export default function MobileMenuToggle({ logo, navItems }: MobileMenuTogglePro
           }`}
       >
         <div className="flex justify-between p-4 backdrop-blur-[20px]">
-          <Link href="/" className="flex items-center gap-2 relative w-[126px] h-[38px]">
+          <Link href="/" className="flex items-center gap-2 relative w-31.5 h-9.5">
             <Image src={logo} alt="ChargeMate Logo" fill className="object-contain" sizes="100%" priority />
           </Link>
 
@@ -69,18 +69,15 @@ export default function MobileMenuToggle({ logo, navItems }: MobileMenuTogglePro
               </Typography>
             </div>
 
-            <Button
-              text="Join"
-              bg="#d9f99d"
-              color="#101010"
-              variant="sm"
-              className="w-full"
-              onClick={() => {
-                const element = document.getElementById("waitlist-form");
-                element?.scrollIntoView({ behavior: "smooth" });
-                setIsOpen(false);
-              }}
-            />
+            <Link href="/signup" className="w-full">
+              <Button
+                text="Sign Up"
+                bg="#d9f99d"
+                color="#101010"
+                variant="sm"
+                className="w-full"
+              />
+            </Link>
           </div>
         </nav>
       </div>

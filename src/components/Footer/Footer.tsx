@@ -14,11 +14,11 @@ const Footer: FC = () => {
     return (
         <footer className="w-full">
             <div className="flex flex-col">
-                <div className="bg-[#EEF6FF] py-8 lg:py-[50px] ">
+                <div className="bg-[#ecfccb] py-8 lg:py-12.5 ">
                     <Container>
                         <div className="flex flex-col gap-8 lg:flex-row lg:justify-between">
                             <div className="flex flex-col gap-3 max-w-full lg:max-w-[320px]">
-                                <div className="flex items-center relative w-[136px] h-10">
+                                <div className="flex items-center relative w-34 h-10">
                                     <Image
                                         src={logo}
                                         alt="world"

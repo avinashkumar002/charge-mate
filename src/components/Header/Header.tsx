@@ -6,7 +6,7 @@ import Container from "@/components/Container/Container";
 import Typography from "@/components/Typography/Typography";
 import ScrollNavLink from "../ScrollNavLink/ScrollNavLink";
 import MobileMenuToggle from "./MobileMenuToggle";
-import ScrollButton from "./ScrollButton";
+import Button from "../Button/Button";
 
 const NAV_ITEMS = [
     { label: "How it Works", target: "how-it-works" },
@@ -16,7 +16,7 @@ const NAV_ITEMS = [
 
 export default function Header() {
     return (
-        <header className="w-full fixed top-0 z-1000 backdrop-blur-[20px] shadow-lg">
+        <header className="w-full fixed top-0 z-1000 backdrop-blur-[20px] shadow-lg bg-white/80">
             <Container>
                 <nav>
                     {/* Desktop Header */}
@@ -41,7 +41,7 @@ export default function Header() {
                                 <div className="px-[19px] py-[9px] border border-[#727272] rounded-lg">
                                     <div className="flex gap-2 items-center">
                                         <div className="relative w-4 h-4">
-                                            <Image src={world} alt="world" fill className="object-contain" sizes="100%" priority />
+                                            <Image src={world} alt="language" fill className="object-contain" sizes="100%" priority />
                                         </div>
                                         <Typography variant="para" weight={500} className="text-black-700">
                                             EN
@@ -49,14 +49,27 @@ export default function Header() {
                                     </div>
                                 </div>
 
-                                <ScrollButton
-                                    target="waitlist-form"
-                                    text="Join"
-                                    bg="#d9f99d"
-                                    color="#101010"
-                                    hoverBg="#bef264"
-                                    variant="sm"
-                                />
+                                {/* Login Button */}
+                                <Link href="/login">
+                                    <Button
+                                        text="Login"
+                                        bg="#FFFFFF"
+                                        color="#101010"
+                                        hoverBg="#F5F5F5"
+                                        variant="sm"
+                                    />
+                                </Link>
+
+                                {/* Sign Up Button */}
+                                <Link href="/signup">
+                                    <Button
+                                        text="Sign Up"
+                                        bg="#d9f99d"
+                                        color="#101010"
+                                        hoverBg="#bef264"
+                                        variant="sm"
+                                    />
+                                </Link>
                             </div>
                         </div>
                     </div>

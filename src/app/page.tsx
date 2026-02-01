@@ -6,7 +6,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import device from "@/assets/images/device.png"
 import Image from "next/image";
 import Button from "@/components/Button/Button";
 import glass from "@/assets/svgs/glass.svg"
@@ -22,23 +21,16 @@ import dots from "@/assets/svgs/dots.svg"
 import star from "@/assets/svgs/star.svg"
 import BackgroundWave from "@/assets/svgs/BackgroundWave";
 import FaqCar from "@/assets/svgs/FaqCar";
-import ProfileIcon from "@/assets/svgs/ProfileIcon";
 import parkedCar from "@/assets/svgs/parked-car.svg"
 import EffortCard from "@/components/molecules/EffortCard";
 import FeatureCard from "@/components/molecules/FeatureCards"
 import FaqList from "@/components/molecules/Faq/FaqList";
-import InputGroup from "@/components/InputGroup/InputGroup";
-import EmailIcon from "@/assets/svgs/EmailIcon";
-import PhoneIcon from "@/assets/svgs/PhoneIcon";
+
 import AnimatedCarSection from "@/components/molecules/AnimatedCarSection";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import useScrollTo from "@/hooks/useScrollTo";
-import toast from 'react-hot-toast';
-import { useRouter } from "next/navigation";
 
-import { contactSchema, ContactFormValues } from "@/schemas/contactSchema";
+import useScrollTo from "@/hooks/useScrollTo";
+
 import ScrollHandler from "@/components/molecules/ScrollHandle";
 import AvatarGroup from "@/components/molecules/AvatarGroup";
 import TestimonialCard from "@/components/molecules/TestimonialCard";
@@ -50,6 +42,7 @@ import paidHost from "@/assets/svgs/paid-host.svg";
 import Verified from "@/assets/svgs/Verified";
 import Guaranteed from "@/assets/svgs/Guaranteed";
 import Effortless from "@/assets/svgs/Effortless";
+import Link from "next/link";
 
 
 const WaitlistPage: FC = () => {
@@ -110,14 +103,7 @@ const WaitlistPage: FC = () => {
     const scrollTo = useScrollTo();
     const [showAll, setShowAll] = useState(false);
 
-    const handleScrollAndSelect = (role: "driver" | "host") => {
-        setValue("role", role, {
-            shouldValidate: false,
-            shouldDirty: true,
-            shouldTouch: true
-        });
-        scrollTo("waitlist-form");
-    };
+
 
     const slides = [
         {
@@ -209,57 +195,6 @@ const WaitlistPage: FC = () => {
         },
     ];
 
-
-
-    const router = useRouter();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset,
-        setValue
-    } = useForm<ContactFormValues>({
-        resolver: zodResolver(contactSchema),
-    });
-
-    const onSubmit = async (data: ContactFormValues) => {
-        const loadingToast = toast.loading("Submitting...");
-        try {
-            const submissionData = {
-                ...data,
-                previousURL: window.location.pathname,
-                ip: "Unknown",
-                browserInfo: navigator.userAgent,
-            };
-            const [sheetResult, emailResult] = await Promise.allSettled([
-                fetch("/api/submit-waitlist", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(submissionData),
-                }).then(res => res.json()),
-
-                fetch("/api/send-mail", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(submissionData),
-                }).then(res => res.json())
-            ]);
-            const sheetSuccess = sheetResult.status === "fulfilled" && sheetResult.value.success;
-            if (sheetSuccess) {
-                toast.dismiss(loadingToast);
-                reset();
-                router.push("/thankyou");
-            } else {
-                const errorMsg = sheetResult.status === "rejected"
-                    ? sheetResult.reason?.toString()
-                    : sheetResult.value?.error || "Failed to submit form";
-                toast.error(errorMsg, { id: loadingToast });
-            }
-        } catch (err) {
-            toast.error("An error occurred. Please try again.", { id: loadingToast });
-            console.error("Submit error:", err);
-        }
-    };
     const initialCount = 5;
     const handleToggleFaqs = () => {
         setShowAll(prev => !prev);
@@ -323,29 +258,34 @@ const WaitlistPage: FC = () => {
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row gap-3 md:gap-6 items-center justify-center">
+
                             <div className="w-full md:w-auto">
-                                <Button
-                                    text="Join as a Charger Host"
-                                    onClick={() => handleScrollAndSelect("host")}
-                                    variant="lg"
-                                    bg="#365314"
-                                    color="#FFFFFF"
-                                    hoverBg="#101010"
-                                    boxShadow="1px 2px 24px 0px #13245733"
-                                    className="w-full md:w-auto"
-                                />
+                                <Link href="/signup?role=host">
+                                    <Button
+                                        text="Join as Host"
+                                        variant="lg"
+                                        bg="#365314"
+                                        color="#FFFFFF"
+                                        hoverBg="#101010"
+                                        boxShadow="1px 2px 24px 0px #13245733"
+                                        className="w-full md:w-auto"
+                                    />
+                                </Link>
                             </div>
+
                             <div className="w-full md:w-auto">
-                                <Button
-                                    text="Join as a Driver"
-                                    onClick={() => handleScrollAndSelect("driver")}
-                                    variant="lg"
-                                    bg="#d9f99d"
-                                    color="#1a2e05"
-                                    hoverBg="#bef264"
-                                    className="w-full md:w-auto"
-                                />
+                                <Link href="/signup?role=driver">
+                                    <Button
+                                        text="Join as Driver"
+                                        variant="lg"
+                                        bg="#d9f99d"
+                                        color="#1a2e05"
+                                        hoverBg="#bef264"
+                                        className="w-full md:w-auto"
+                                    />
+                                </Link>
                             </div>
+
                         </div>
                     </div>
                 </Container>
@@ -354,7 +294,7 @@ const WaitlistPage: FC = () => {
             {/* How It Works */}
             <section id="how-it-works" className="scroll-mt-15">
                 <Container>
-                    <div className="flex flex-col gap-[52px] md:gap-15 pt-8 pb-11 md:py-[70px] ">
+                    <div className="flex flex-col gap-13 md:gap-15 pt-8 pb-11 md:py-17.5 ">
                         {/* Header */}
                         <div className="flex flex-col justify-between lg:flex-row gap-2 lg:items-end">
                             <div className="flex flex-col gap-1 md:gap-2">
@@ -411,7 +351,7 @@ const WaitlistPage: FC = () => {
             {/* Our Happy Customers */}
             <section className="bg-[#ecfccb] overflow-hidden">
                 <Container pl="pl-6" pr="pr-0">
-                    <div className="pt-4 md:pt-8 pb-8 md:pb-[70px] ">
+                    <div className="pt-4 md:pt-8 pb-8 md:pb-17.5 ">
                         <div className="flex flex-col gap-6 overflow-hidden">
                             <div className="flex flex-col gap-2 items-center mr-6">
                                 <div className="w-max py-1.5 px-3 bg-[#d9f99d] backdrop-blur-sm rounded-3xl">
@@ -544,7 +484,7 @@ const WaitlistPage: FC = () => {
                             </Typography>
                         </div>
 
-                        <div className="flex gap-5 xl:gap-[90px] items-start h-full w-full ">
+                        <div className="flex gap-5 xl:gap-22.5 items-start h-full w-full ">
                             <div className="hidden md:flex flex-col gap-6 w-[80%] sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
                                 <FaqCar />
                                 <div className="">
@@ -581,7 +521,7 @@ const WaitlistPage: FC = () => {
             {/* Key Features */}
             <section id="features-view" className="bg-[#ecfccb] scroll-mt-10">
                 <Container pl="pl-6" pr="pr-0">
-                    <div className="feature-content pt-8 md:pt-[70px] flex flex-col gap-8 md:gap-15 ">
+                    <div className="feature-content pt-8 md:pt-17.5 flex flex-col gap-8 md:gap-15 ">
                         <div className="flex flex-col gap-2 lg:gap-3 items-center pr-6 md:pr-0">
                             <div className="flex flex-col gap-1 lg:gap-2 items-center ">
                                 <div className="w-max py-1.5 px-3 bg-[#d9f99d] backdrop-blur-sm rounded-3xl">
@@ -603,7 +543,7 @@ const WaitlistPage: FC = () => {
                                 A platform built to make EV charging safer, simpler, and smarter for everyone.
                             </Typography>
                         </div>
-                        <div className="flex flex-col gap-10 lg:gap-[50px] ">
+                        <div className="flex flex-col gap-10 lg:gap-12.5 ">
                             <div className="flex flex-col gap-8 lg:flex-row justify-center ">
                                 <div className="hidden xl:flex gap-8">
                                     <div className="flex flex-col gap-9">
@@ -701,8 +641,8 @@ const WaitlistPage: FC = () => {
 
                                     <div className="custom-pagination flex justify-center gap-2"></div>
                                 </div>
-                                <div className="w-full max-w-[400px] mr-6">
-                                    <div className="flex justify-center relative w-full h-full min-h-[506px] md:min-h-[450px] ">
+                                <div className="w-full max-w-100 mr-6">
+                                    <div className="flex justify-center relative w-full h-full min-h-126.5 md:min-h-112.5 ">
                                         <Image
                                             src={car}
                                             alt="car"
@@ -718,21 +658,20 @@ const WaitlistPage: FC = () => {
                                 <h4 className="font-semibold text-[20px] leading-8 md:text-[30px] md:leading-[37.5px] tracking-[1%] text-center text-black-900">
                                     Find your next charging station the smarter way.
                                 </h4>
-                                <div onClick={() => scrollTo("waitlist-form")} className="d-flex w-full lg:w-auto cursor-pointer">
-                                    <Button
-                                        text="Join the Waitlist"
-                                        variant="lg"
-                                        bg="#365314"
-                                        color="#FFFFFF"
-                                        hoverBg="#101010"
-                                        boxShadow="1px 2px 24px 0px #13245733"
-                                        className="w-full"
-                                    />
+                                <div className="d-flex w-full lg:w-auto cursor-pointer">
+                                    <Link href="/signup">
+                                        <Button
+                                            text="Get Started Now"
+                                            variant="lg"
+                                            bg="#365314"
+                                            color="#FFFFFF"
+                                            hoverBg="#101010"
+                                            boxShadow="1px 2px 24px 0px #13245733"
+                                            className="w-full"
+                                        />
+                                    </Link>
                                 </div>
                             </div>
-
-
-
 
                         </div>
                     </div>
@@ -745,126 +684,6 @@ const WaitlistPage: FC = () => {
                 <BackgroundWave fillColor="#ecfccb" />
             </div>
 
-
-
-            {/* Waitlist Form */}
-            <section id="waitlist-form" className="scroll-mt-[100px]">
-                <Container>
-                    <div className="pb-y md:py-[70px]">
-                        <div className="form-content rounded-3xl border-2 border-[#1a2e05] py-8 px-6 md:px-[50px] lg:py-[70px] lg:px-[100px] relative bg-[url('/form-bg.svg')] bg-contain bg-center bg-no-repeat flex flex-col gap-8 md:flex-row md:gap-[50px] ">
-                            <div className="flex flex-col gap-1 md:gap-2 w-full max-w-[426px] ">
-                                <div className="w-max py-1.5 px-3 bg-[#d9f99d] backdrop-blur-sm rounded-3xl">
-                                    <Typography
-                                        variant="chip"
-                                        weight={600}
-                                        lineHeight={isMd ? 20 : 16}
-                                        className="text-[#1a2e05]"
-                                    >
-                                        EASY CHARGING, EVERY TIME
-                                    </Typography>
-                                </div>
-
-                                <div className="flex flex-col gap-2 md:gap-3">
-                                    <Typography variant="h2" weight={600} lineHeight={isMd ? 45 : 36} className="text-black-900">
-                                        Reserve Your Charging Spot on the Waitlist
-                                    </Typography>
-                                    <Typography variant="body" lineHeight={isMd ? 32 : 22} letterSpacing={0.01} weight={400} className="text-black-700">
-                                        Connect with nearby hosts and discover hassle-free EV charging before anyone else.
-                                    </Typography>
-                                </div>
-                            </div>
-                            {/* Form Inputs & Button logic unchanged */}
-                            <div className="w-full">
-                                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 md:gap-5">
-                                    <div className="flex flex-col gap-4">
-                                        <InputGroup
-                                            placeholder="Your name"
-                                            type="text"
-                                            Icon={ProfileIcon}
-                                            error={errors.name?.message}
-                                            register={register("name")}
-                                        />
-
-                                        <InputGroup
-                                            placeholder="Your email"
-                                            type="email"
-                                            Icon={EmailIcon}
-                                            error={errors.email?.message}
-                                            register={register("email")}
-                                        />
-                                        <InputGroup
-                                            placeholder="Your phone number (optional)"
-                                            type="tel"
-                                            Icon={PhoneIcon}
-                                            error={errors.phone?.message}
-                                            register={register("phone")}
-                                        />
-                                        <div className="flex flex-col gap-0.5">
-                                            <Typography variant="chip" weight={500} lineHeight={isMd ? 20 : 16} className="text-black-900">
-                                                User Type
-                                            </Typography>
-                                            <div className="flex gap-3">
-                                                <label className="flex items-center gap-2 py-3.5 px-4 bg-[#F9F9F9] hover:bg-[#ECF5FF] border border-[#F9F9F9] hover:border-[#8EC7FF] has-[:checked]:bg-[#ECF5FF] has-[:checked]:border-[#2C7FFF] w-full rounded-lg cursor-pointer group">
-                                                    <input
-                                                        type="radio"
-                                                        {...register("role")}
-                                                        value="driver"
-                                                        className="w-4 h-4 p-1 appearance-none rounded-full border border-[#D0D0D0] bg-clip-content 
- checked:bg-[#2C7FFF] checked:border-[#2C7FFF] 
- group-hover:border-[#59A6FF] group-hover:bg-[#59A6FF] 
- relative before:content-[''] before:absolute before:rounded-full before:w-2 before:h-2 before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 
- before:bg-[#8EC7FF] before:opacity-0 
- checked:before:bg-[#2C7FFF] checked:before:opacity-100 
- group-hover:before:opacity-100"
-                                                    />
-                                                    <span className="font-poppins font-medium text-[14px] leading-5 tracking-normal text-black-800">
-                                                        Driver
-                                                    </span>
-                                                </label>
-                                                <label className="flex items-center gap-2 py-3.5 px-4 bg-[#F9F9F9] hover:bg-[#ECF5FF] border border-[#F9F9F9] hover:border-[#8EC7FF] has-[:checked]:bg-[#ECF5FF] has-[:checked]:border-[#2C7FFF] w-full rounded-lg cursor-pointer group">
-                                                    <input
-                                                        type="radio"
-                                                        {...register("role")}
-                                                        value="host"
-                                                        className="w-4 h-4 p-1 appearance-none rounded-full border border-[#D0D0D0] bg-clip-content 
- checked:bg-[#2C7FFF] checked:border-[#2C7FFF] 
- group-hover:border-[#59A6FF] group-hover:bg-[#59A6FF] 
- relative before:content-[''] before:absolute before:rounded-full before:w-2 before:h-2 before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 
- before:bg-[#8EC7FF] before:opacity-0 
- checked:before:bg-[#2C7FFF] checked:before:opacity-100 
- group-hover:before:opacity-100"
-                                                    />
-                                                    <span className="font-poppins font-medium text-[14px] leading-5 tracking-normal text-black-800">
-                                                        Host
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            {errors.role?.message && (
-                                                <Typography variant="chip" weight={400} className="text-red-500">
-                                                    {errors.role.message}
-                                                </Typography>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="max-w-[180px]">
-                                        <Button
-                                            text="Submit"
-                                            variant="lg"
-                                            bg="#365314"
-                                            color="#FFFFFF"
-                                            hoverBg="#101010"
-                                            boxShadow="1px 2px 24px 0px #13245733"
-                                            className="w-full"
-                                            type="submit"
-                                        />
-
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </Container>
-            </section>
 
 
             {/* car design */}
