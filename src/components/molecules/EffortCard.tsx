@@ -76,7 +76,7 @@ const EffortCard: React.FC<EffortCardProps> = ({
           style={{ backgroundColor: bgColor }}
         >
           <div className="flex items-center relative w-[30px] lg:w-10 h-[30px] lg:h-10">
-            <Image src={icon} alt={title} fill className="object-contain" sizes="100%" priority />
+            <Image src={icon} alt={title} fill className="object-contain" sizes="100%"  />
           </div>
         </div>
 

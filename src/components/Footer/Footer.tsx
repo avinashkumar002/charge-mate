@@ -25,7 +25,7 @@ const Footer: FC = () => {
                                         fill
                                         className="object-contain"
                                         sizes="100%"
-                                        priority
+                                         
                                     />
                                 </div>
                                 <div className="flex flex-col">
@@ -119,7 +119,7 @@ const Footer: FC = () => {
                                             fill
                                             className="object-contain"
                                             sizes="100%"
-                                            priority
+                                             
                                         />
                                     </div>
                                     <Typography variant="body" weight={500} className="text-[#2B2B2B]">
@@ -136,7 +136,7 @@ const Footer: FC = () => {
                                                 fill
                                                 className="object-contain"
                                                 sizes="100%"
-                                                priority
+                                                 
                                             />
                                         </div>
                                     </Link>
@@ -149,7 +149,7 @@ const Footer: FC = () => {
                                                 fill
                                                 className="object-contain"
                                                 sizes="100%"
-                                                priority
+                                                 
                                             />
                                         </div>
                                     </Link>
@@ -162,7 +162,7 @@ const Footer: FC = () => {
                                                 fill
                                                 className="object-contain"
                                                 sizes="100%"
-                                                priority
+                                                 
                                             />
                                         </div>
                                     </Link>

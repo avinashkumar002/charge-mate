@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  phone      String?  @unique
+  name       String
+  role       String   // "driver" or "host"
+  created_at DateTime @default(now())
+  
+  chargers   Charger[]
+  bookings   Booking[]
+}
+
+model Charger {
+  id              String   @id @default(uuid())
+  host_id         String
+  title           String
+  address         String
+  pincode         String
+  price_per_hour  Int
+  charger_type    String
+  photo_url       String?
+  available_start String   // "09:00"
+  available_end   String   // "21:00"
+  status          String   @default("active")
+  created_at      DateTime @default(now())
+  
+  host            User     @relation(fields: [host_id], references: [id])
+  bookings        Booking[]
+}
+
+model Booking {
+  id           String   @id @default(uuid())
+  charger_id   String
+  driver_id    String
+  booking_date DateTime
+  start_time   String
+  end_time     String
+  total_price  Int
+  status       String   @default("pending")
+  created_at   DateTime @default(now())
+  
+  charger      Charger  @relation(fields: [charger_id], references: [id])
+  driver       User     @relation(fields: [driver_id], references: [id])
+}

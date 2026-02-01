@@ -649,7 +649,6 @@ const WaitlistPage: FC = () => {
                                             fill
                                             className="object-contain"
                                             sizes="100%"
-                                            priority
                                         />
                                     </div>
                                 </div>
@@ -695,14 +694,13 @@ const WaitlistPage: FC = () => {
                 </div>
                 <div className="flex xl:hidden">
                     <Container>
-                        <div className="flex relative w-full h-full min-h-[122px] ">
+                        <div className="flex relative w-full h-full min-h-30.5 ">
                             <Image
                                 src={parkedCar}
                                 alt="parkedCar"
                                 fill
                                 className="object-contain"
                                 sizes="100%"
-                                priority
                             />
                         </div>
                     </Container>

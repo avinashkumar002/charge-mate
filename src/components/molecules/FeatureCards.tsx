@@ -35,7 +35,7 @@ export default function FeatureCard({
                     width={26}
                     height={26}
                     className="object-contain"
-                    priority
+                     
                 />
             </div>
 
@@ -62,8 +62,8 @@ export default function FeatureCard({
                             alt={chipIconAlt}
                             width={12}
                             height={12}
-                            className="object-contain"
-                            priority
+                            className="object-contain w-auto h-auto"
+                             
                         />
                     )}
                 </div>

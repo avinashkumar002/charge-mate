@@ -24,7 +24,7 @@ export default function MobileMenuToggle({ logo, navItems }: MobileMenuTogglePro
       <button onClick={() => setIsOpen(true)}>
         <div className="p-3 bg-[#d9f99d] rounded-lg overflow-hidden">
           <div className="relative w-5 h-4">
-            <Image src={ham} alt="menu" fill className="object-contain" sizes="100%" priority />
+            <Image src={ham} alt="menu" fill className="object-contain" sizes="100%"  />
           </div>
         </div>
       </button>
@@ -36,12 +36,12 @@ export default function MobileMenuToggle({ logo, navItems }: MobileMenuTogglePro
       >
         <div className="flex justify-between p-4 backdrop-blur-[20px]">
           <Link href="/" className="flex items-center gap-2 relative w-31.5 h-9.5">
-            <Image src={logo} alt="ChargeMate Logo" fill className="object-contain" sizes="100%" priority />
+            <Image src={logo} alt="ChargeMate Logo" fill className="object-contain" sizes="100%"  />
           </Link>
 
           <button onClick={() => setIsOpen(false)}>
             <div className="relative w-6 h-6">
-              <Image src={cross} alt="close" fill className="object-contain" sizes="100%" priority />
+              <Image src={cross} alt="close" fill className="object-contain" sizes="100%"  />
             </div>
           </button>
         </div>
@@ -62,7 +62,7 @@ export default function MobileMenuToggle({ logo, navItems }: MobileMenuTogglePro
           <div className="flex justify-between gap-4">
             <div className="flex items-center gap-3 w-full justify-center border border-[#2C7FFF33] rounded-lg">
               <div className="relative w-4 h-4">
-                <Image src={world} alt="world" fill className="object-contain" sizes="100%" priority />
+                <Image src={world} alt="world" fill className="object-contain" sizes="100%" />
               </div>
               <Typography variant="body" weight={500} className="text-black-900">
                 EN
