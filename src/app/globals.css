@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+
+  /* Blue */
+  --blue-950: #13245F;
+  --blue-900: #19398F;
+  --blue-800: #173EB6;
+  --blue-700: #144DE1;
+  --blue-600: #1B62F5;
+  --blue-500: #2C7FFF;
+  --blue-400: #59A8FF;
+  --blue-300: #8EC7FF;
+  --blue-200: #BCD9FF;
+  --blue-100: #D9E8FF;
+  --blue-50: #EEF6FF;
+
+  /* Black / Gray */
+  --black-900: #101010;
+  --black-800: #282828;
+  --black-700: #434343;
+  --black-600: #727272;
+  --black-500: #898989;
+  --black-400: #A1A1A1;
+  --black-300: #B8B8B8;
+  --black-200: #D0D0D0;
+  --black-100: #E7E7E7;
+  --black-50: #EFEFEF;
+  --black-0: #F9F9F9;
+  --black-00: #FFFFFF;
+
+
+}
+
+
+@theme inline {
+  --font-inter: var(--font-inter);
+  --font-poppins: var(--font-poppins);
+}
+
+body {
+  background: var(--background);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+@layer utilities {
+  .font-poppins {
+    font-family: var(--font-poppins), system-ui, sans-serif;
+  }
+
+  /* ---------------- Text Colors: Blue ---------------- */
+  .text-blue-950 {
+    color: var(--blue-950);
+  }
+
+  .text-blue-900 {
+    color: var(--blue-900);
+  }
+
+  .text-blue-800 {
+    color: var(--blue-800);
+  }
+
+  .text-blue-700 {
+    color: var(--blue-700);
+  }
+
+  .text-blue-600 {
+    color: var(--blue-600);
+  }
+
+  .text-blue-500 {
+    color: var(--blue-500);
+  }
+
+  .text-blue-400 {
+    color: var(--blue-400);
+  }
+
+  .text-blue-300 {
+    color: var(--blue-300);
+  }
+
+  .text-blue-200 {
+    color: var(--blue-200);
+  }
+
+  .text-blue-100 {
+    color: var(--blue-100);
+  }
+
+  .text-blue-50 {
+    color: var(--blue-50);
+  }
+
+  /* ---------------- Text Colors: Black / Gray ---------------- */
+  .text-black-900 {
+    color: var(--black-900);
+  }
+
+  .text-black-800 {
+    color: var(--black-800);
+  }
+
+  .text-black-700 {
+    color: var(--black-700);
+  }
+
+  .text-black-600 {
+    color: var(--black-600);
+  }
+
+  .text-black-500 {
+    color: var(--black-500);
+  }
+
+  .text-black-400 {
+    color: var(--black-400);
+  }
+
+  .text-black-300 {
+    color: var(--black-300);
+  }
+
+  .text-black-200 {
+    color: var(--black-200);
+  }
+
+  .text-black-100 {
+    color: var(--black-100);
+  }
+
+  .text-black-50 {
+    color: var(--black-50);
+  }
+
+  .text-black-0 {
+    color: var(--black-0);
+  }
+
+  .text-black-00 {
+    color: var(--black-00);
+  }
+}
+
+
+.swiper-pagination-bullet {
+  background: #000;
+  opacity: 0.5;
+  margin: 0 !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background: #000 !important;
+}
+
+
+
+/* Center slide zoom effect */
+/* Base slide - smaller */
+.testimonial-swiper .slide-inner {
+  transition: all 0.35s ease-in-out;
+  transform: scaleY(0.85);
+  transform-origin: center;
+}
+
+/* Neighbor slides */
+.testimonial-swiper .swiper-slide-next .slide-inner,
+.testimonial-swiper .swiper-slide-prev .slide-inner {
+  transform: scaleY(0.95);
+}
+
+/* Center (active) slide */
+.testimonial-swiper .swiper-slide-active .slide-inner {
+  transform: scaleY(1.03);
+  z-index: 10;
+  overflow: visible !important;
+}
+
+.testimonials-pagination .swiper-pagination-bullet {
+  height: 16px;
+  width: 16px;
+}
+
+
+
+@media (max-width: 1440px) {}
+
+@media (max-width: 768px) {
+  .testimonial-swiper .swiper-slide-active .slide-inner {
+    transform: scaleY(1);
+    z-index: 1;
+  }
+
+  .testimonial-swiper .swiper-slide-next .slide-inner,
+  .testimonial-swiper .swiper-slide-prev .slide-inner {
+    transform: scaleY(1);
+  }
+
+  .testimonials-pagination .swiper-pagination-bullet {
+    height: 8px;
+    width: 8px;
+  }
+}
+
+@media (max-width: 392px) {}
