@@ -209,7 +209,7 @@ const WaitlistPage: FC = () => {
             {/* Hero Section */}
             <section className="relative">
                 <Container>
-                    <div className="flex flex-col gap-6 md:gap-8 py-8 md:py-[84px] max-w-[600px] mx-auto ">
+                    <div className="flex flex-col gap-6 md:gap-8 py-8 md:py-21 max-w-150 mx-auto ">
                         <div className="flex flex-col gap-4 md:gap-6">
                             <div className="flex flex-col gap-2 md:gap-4">
                                 <Typography variant="h1" weight={700} letterSpacing={0.01} className="text-black-900 text-center">
@@ -239,7 +239,7 @@ const WaitlistPage: FC = () => {
                                         lineHeight={20}
                                         className="text-[#1a2e05]"
                                     >
-                                        Guaranteed Parking
+                                        Guaranteed Charging
                                     </Typography>
                                 </div>
 
@@ -331,7 +331,7 @@ const WaitlistPage: FC = () => {
                         </div>
 
                         {/* Effort Cards    */}
-                        <div className="flex flex-col lg:flex-row lg:justify-around gap-[42px] lg:gap-8 md:bg-[url('/bg-net.svg')] bg-none bg-contain md:bg-cover bg-center bg-no-repeat">
+                        <div className="flex flex-col lg:flex-row lg:justify-around gap-10.5 lg:gap-8 md:bg-[url('/bg-net.svg')] bg-none bg-contain md:bg-cover bg-center bg-no-repeat">
                             {data[activeRole].map((card) => (
                                 <EffortCard
                                     key={card.number}
@@ -474,7 +474,7 @@ const WaitlistPage: FC = () => {
             {/* FAQ */}
             <section id="faq-view" className="scroll-mt-10">
                 <Container>
-                    <div className="flex flex-col gap-8 md:gap-[50px] items-center py-8 md:py-[70px] ">
+                    <div className="flex flex-col gap-8 md:gap-12.5 items-center py-8 md:py-17.5 ">
                         <div className="flex flex-col gap-1 md:gap-2 items-center">
                             <Typography variant="h2" weight={600} lineHeight={isMd ? 45 : 36} className="text-black-900">
                                 Frequently Asked Questions
@@ -499,7 +499,7 @@ const WaitlistPage: FC = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-6 max-w-[564px] ">
+                            <div className="flex flex-col gap-6 max-w-141 ">
                                 <FaqList showCount={showAll ? undefined : initialCount} />
                                 <div className="flex justify-center md:hidden">
                                     <Button
