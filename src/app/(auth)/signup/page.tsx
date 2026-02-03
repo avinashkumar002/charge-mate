@@ -11,6 +11,7 @@ import InputGroup from "@/components/InputGroup/InputGroup";
 import EmailIcon from "@/assets/svgs/EmailIcon";
 import ProfileIcon from "@/assets/svgs/ProfileIcon";
 import { signupSchema, SignupFormValues } from "@/schemas/authSchema";
+import { supabase } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -32,34 +33,52 @@ export default function SignupPage() {
   });
 
   const onSubmit = async (data: SignupFormValues) => {
-    setIsLoading(true);
-    setError("");
+  setIsLoading(true);
+  setError("");
 
-    try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+  try {
+    // Step 1: Create auth user on CLIENT (not server)
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+    });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Signup failed");
-      }
-
-      // Redirect to appropriate dashboard
-      if (data.role === "driver") {
-        router.push("/driver");
-      } else {
-        router.push("/host");
-      }
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setIsLoading(false);
+    if (authError || !authData.user) {
+      throw new Error(authError?.message || "Signup failed");
     }
-  };
+
+    // Step 2: Save user data to database via API
+    const response = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: authData.user.id,
+        email: data.email,
+        name: data.name,
+        role: data.role,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Failed to save user data");
+    }
+
+    // Step 3: Redirect based on role
+    if (data.role === "driver") {
+      router.push("/driver");
+    } else {
+      router.push("/host");
+    }
+    router.refresh();
+
+  } catch (err: any) {
+    setError(err.message || "Something went wrong");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <section className="min-h-screen flex items-center justify-center py-12 px-4">

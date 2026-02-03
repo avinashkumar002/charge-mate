@@ -1,30 +1,34 @@
 import { NextResponse } from "next/server";
-import { signUp } from "@/lib/supabase/auth";
 import { prisma } from "@/lib/prisma/client";
-import { signupSchema } from "@/schemas/authSchema";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const { userId, email, name, role } = await request.json();
 
-    // Validate request data
-    const validatedData = signupSchema.parse(body);
-    const { email, password, name, role } = validatedData;
-
-    // Create auth user in Supabase
-    const { user } = await signUp(email, password);
-
-    if (!user) {
+    // Validate required fields
+    if (!userId || !email || !name || !role) {
       return NextResponse.json(
-        { error: "Failed to create user" },
-        { status: 500 }
+        { error: "Missing required fields" },
+        { status: 400 }
       );
     }
 
-    // Save user data in our database
+    // Check if user already exists in database
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "User already exists" },
+        { status: 400 }
+      );
+    }
+
+    // Save user data in database
     await prisma.user.create({
       data: {
-        id: user.id,
+        id: userId,
         email,
         name,
         role,
@@ -32,26 +36,12 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(
-      { success: true, userId: user.id },
+      { success: true, userId },
       { status: 201 }
     );
+
   } catch (error: any) {
     console.error("Signup error:", error);
-
-    // Handle specific errors
-    if (error.message?.includes("already registered")) {
-      return NextResponse.json(
-        { error: "Email already exists" },
-        { status: 400 }
-      );
-    }
-
-    if (error.name === "ZodError") {
-      return NextResponse.json(
-        { error: "Invalid form data", details: error.errors },
-        { status: 400 }
-      );
-    }
 
     return NextResponse.json(
       { error: "Signup failed. Please try again." },
