@@ -1,29 +1,36 @@
 import { NextResponse } from "next/server";
-import { signIn } from "@/lib/supabase/auth";
 import { prisma } from "@/lib/prisma/client";
 import { loginSchema } from "@/schemas/authSchema";
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-
-    // Validate request data
     const validatedData = loginSchema.parse(body);
     const { email, password } = validatedData;
 
-    // Sign in with Supabase Auth
-    const { user } = await signIn(email, password);
+    // Create Supabase client
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
-    if (!user) {
+    // Sign in with Supabase Auth
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error || !data.user) {
       return NextResponse.json(
-        { error: "Invalid credentials" },
+        { error: "Invalid email or password" },
         { status: 401 }
       );
     }
 
-    // Get user data from database to check role
+    // Get user data from database
     const userData = await prisma.user.findUnique({
-      where: { id: user.id },
+      where: { id: data.user.id },
       select: { role: true, name: true },
     });
 
@@ -34,24 +41,21 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json(
+    // Return session token
+    const response = NextResponse.json(
       {
         success: true,
-        userId: user.id,
+        userId: data.user.id,
         role: userData.role,
         name: userData.name,
+        session: data.session,
       },
       { status: 200 }
     );
+
+    return response;
   } catch (error: any) {
     console.error("Login error:", error);
-
-    if (error.message?.includes("Invalid login credentials")) {
-      return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
-      );
-    }
 
     if (error.name === "ZodError") {
       return NextResponse.json(
