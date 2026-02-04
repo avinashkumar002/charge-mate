@@ -4,33 +4,75 @@ import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
 import Container from "@/components/Container/Container";
 import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
+import Spinner from "@/components/Spinner/Spinner";
 
 export default function DriverDashboard() {
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner size="lg" color="#365314" />
+      </div>
+    );
+  }
 
   return (
     <ProtectedRoute allowedRole="driver">
-      <section className="min-h-screen py-12">
+      <section className="min-h-screen py-20 bg-[#FAFAFA]">
         <Container>
-          <div className="flex flex-col gap-6">
-            <Typography variant="h2" weight={600}>
-              Welcome, {user?.name}!
-            </Typography>
-            <Typography variant="para">
-              You're logged in as a <strong>{user?.role}</strong>
-            </Typography>
-            <Typography variant="para" className="text-black-600">
-              This is your Driver Dashboard. You'll be able to find chargers here soon.
-            </Typography>
-            <div className="w-max">
-              <Button
-                text="Logout"
-                bg="#ef4444"
-                color="#FFFFFF"
-                hoverBg="#dc2626"
-                variant="sm"
-                onClick={logout}
-              />
+          <div className="max-w-4xl mx-auto">
+            {/* Welcome Card */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E5E5]">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div className="flex flex-col gap-2">
+                  <Typography variant="h2" weight={600} className="text-black-900">
+                    Welcome, {user?.name}! 👋
+                  </Typography>
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 bg-[#d9f99d] text-[#365314] text-sm font-medium rounded-full">
+                      {user?.role === "driver" ? "Driver" : "Host"}
+                    </span>
+                    <Typography variant="para" className="text-black-600">
+                      {user?.email}
+                    </Typography>
+                  </div>
+                </div>
+                <div>
+                  <Button
+                    text="Logout"
+                    bg="#FFFFFF"
+                    color="#C7F000"
+                    hoverBg="#4D7C0F"
+                    variant="sm"
+                    boxShadow="inset 0 0 0 1px #E5E5E5"
+                    onClick={logout}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Coming Soon Card */}
+            <div className="mt-6 bg-white rounded-2xl p-8 shadow-sm border border-[#E5E5E5]">
+              <div className="flex flex-col items-center text-center gap-4">
+                <div className="w-16 h-16 bg-[#ECF5FF] rounded-full flex items-center justify-center">
+                  <span className="text-3xl">🔌</span>
+                </div>
+                <Typography variant="h3" weight={600} className="text-black-900">
+                  Find Chargers Coming Soon
+                </Typography>
+                <Typography variant="para" className="text-black-600 max-w-md">
+                  You'll be able to search for nearby chargers, view availability, and book charging sessions here.
+                </Typography>
+                <Button
+                  text="Explore Chargers"
+                  bg="#d9f99d"
+                  color="#101010"
+                  hoverBg="#bef264"
+                  variant="lg"
+                  className="mt-2 opacity-50 cursor-not-allowed"
+                />
+              </div>
             </div>
           </div>
         </Container>

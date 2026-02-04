@@ -12,181 +12,184 @@ import EmailIcon from "@/assets/svgs/EmailIcon";
 import ProfileIcon from "@/assets/svgs/ProfileIcon";
 import { signupSchema, SignupFormValues } from "@/schemas/authSchema";
 import { supabase } from "@/lib/supabase/client";
+import Spinner from "@/components/Spinner/Spinner";
 
 export default function SignupPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const roleFromUrl = searchParams.get("role") as "driver" | "host" | null;
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const roleFromUrl = searchParams.get("role") as "driver" | "host" | null;
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupFormValues>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      role: roleFromUrl || undefined,
-    },
-  });
-
-  const onSubmit = async (data: SignupFormValues) => {
-  setIsLoading(true);
-  setError("");
-
-  try {
-    // Step 1: Create auth user on CLIENT (not server)
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignupFormValues>({
+        resolver: zodResolver(signupSchema),
+        defaultValues: {
+            role: roleFromUrl || undefined,
+        },
     });
 
-    if (authError || !authData.user) {
-      throw new Error(authError?.message || "Signup failed");
-    }
+    const onSubmit = async (data: SignupFormValues) => {
+        setIsLoading(true);
+        setError("");
 
-    // Step 2: Save user data to database via API
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: authData.user.id,
-        email: data.email,
-        name: data.name,
-        role: data.role,
-      }),
-    });
+        try {
+            // Step 1: Create auth user on CLIENT (not server)
+            const { data: authData, error: authError } = await supabase.auth.signUp({
+                email: data.email,
+                password: data.password,
+            });
 
-    const result = await response.json();
+            if (authError || !authData.user) {
+                throw new Error(authError?.message || "Signup failed");
+            }
 
-    if (!response.ok) {
-      throw new Error(result.error || "Failed to save user data");
-    }
+            // Step 2: Save user data to database via API
+            const response = await fetch("/api/auth/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: authData.user.id,
+                    email: data.email,
+                    name: data.name,
+                    role: data.role,
+                }),
+            });
 
-    // Step 3: Redirect based on role
-    if (data.role === "driver") {
-      router.push("/driver");
-    } else {
-      router.push("/host");
-    }
-    router.refresh();
+            const result = await response.json();
 
-  } catch (err: any) {
-    setError(err.message || "Something went wrong");
-  } finally {
-    setIsLoading(false);
-  }
-};
+            if (!response.ok) {
+                throw new Error(result.error || "Failed to save user data");
+            }
 
-  return (
-    <section className="min-h-screen flex items-center justify-center py-12 px-4">
-      <Container>
-        <div className="max-w-md mx-auto">
-          <div className="flex flex-col gap-6">
-            {/* Header */}
-            <div className="flex flex-col gap-2 text-center">
-              <Typography variant="h2" weight={600} className="text-black-900">
-                Create Your Account
-              </Typography>
-              <Typography variant="para" weight={400} className="text-black-700">
-                Join ChargeMate and start {roleFromUrl === "host" ? "earning" : "charging"} today
-              </Typography>
-            </div>
+            // Step 3: Redirect based on role
+            if (data.role === "driver") {
+                router.push("/driver");
+            } else {
+                router.push("/host");
+            }
+            router.refresh();
 
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <Typography variant="para" className="text-red-600">
-                  {error}
-                </Typography>
-              </div>
-            )}
+        } catch (err: any) {
+            setError(err.message || "Something went wrong");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-            {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-              <InputGroup
-                placeholder="Full Name"
-                type="text"
-                Icon={ProfileIcon}
-                error={errors.name?.message}
-                register={register("name")}
-              />
+    return (
+        <section className="min-h-screen flex items-center justify-center py-12 px-4">
+            <Container>
+                <div className="max-w-md mx-auto">
+                    <div className="flex flex-col gap-6">
+                        {/* Header */}
+                        <div className="flex flex-col gap-2 text-center">
+                            <Typography variant="h2" weight={600} className="text-black-900">
+                                Create Your Account
+                            </Typography>
+                            <Typography variant="para" weight={400} className="text-black-700">
+                                Join ChargeMate and start {roleFromUrl === "host" ? "earning" : "charging"} today
+                            </Typography>
+                        </div>
 
-              <InputGroup
-                placeholder="Email Address"
-                type="email"
-                Icon={EmailIcon}
-                error={errors.email?.message}
-                register={register("email")}
-              />
+                        {/* Error Message */}
+                        {error && (
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                                <Typography variant="para" className="text-red-600">
+                                    {error}
+                                </Typography>
+                            </div>
+                        )}
 
-              <InputGroup
-                placeholder="Password (min 8 characters)"
-                type="password"
-                Icon={ProfileIcon}
-                error={errors.password?.message}
-                register={register("password")}
-              />
+                        {/* Form */}
+                        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                            <InputGroup
+                                placeholder="Full Name"
+                                type="text"
+                                Icon={ProfileIcon}
+                                error={errors.name?.message}
+                                register={register("name")}
+                            />
 
-              {/* Role Selection */}
-              <div className="flex flex-col gap-2">
-                <Typography variant="chip" weight={500} className="text-black-900">
-                  I want to join as:
-                </Typography>
-                <div className="flex gap-3">
-                  <label className="flex items-center gap-2 py-3.5 px-4 bg-[#F9F9F9] hover:bg-[#ECF5FF] border border-[#F9F9F9] hover:border-[#8EC7FF] has-[:checked]:bg-[#ECF5FF] has-[:checked]:border-[#2C7FFF] w-full rounded-lg cursor-pointer group">
-                    <input
-                      type="radio"
-                      {...register("role")}
-                      value="driver"
-                      className="w-4 h-4 appearance-none rounded-full border border-[#D0D0D0] checked:bg-[#2C7FFF] checked:border-[#2C7FFF]"
-                    />
-                    <span className="font-medium text-sm text-black-800">Driver</span>
-                  </label>
+                            <InputGroup
+                                placeholder="Email Address"
+                                type="email"
+                                Icon={EmailIcon}
+                                error={errors.email?.message}
+                                register={register("email")}
+                            />
 
-                  <label className="flex items-center gap-2 py-3.5 px-4 bg-[#F9F9F9] hover:bg-[#ECF5FF] border border-[#F9F9F9] hover:border-[#8EC7FF] has-[:checked]:bg-[#ECF5FF] has-[:checked]:border-[#2C7FFF] w-full rounded-lg cursor-pointer group">
-                    <input
-                      type="radio"
-                      {...register("role")}
-                      value="host"
-                      className="w-4 h-4 appearance-none rounded-full border border-[#D0D0D0] checked:bg-[#2C7FFF] checked:border-[#2C7FFF]"
-                    />
-                    <span className="font-medium text-sm text-black-800">Host</span>
-                  </label>
+                            <InputGroup
+                                placeholder="Password (min 8 characters)"
+                                type="password"
+                                Icon={ProfileIcon}
+                                error={errors.password?.message}
+                                register={register("password")}
+                            />
+
+                            {/* Role Selection */}
+                            <div className="flex flex-col gap-2">
+                                <Typography variant="chip" weight={500} className="text-black-900">
+                                    I want to join as:
+                                </Typography>
+                                <div className="flex gap-3">
+                                    <label className="flex items-center gap-2 py-3.5 px-4 bg-[#F9F9F9] hover:bg-[#ECF5FF] border border-[#F9F9F9] hover:border-[#8EC7FF] has-checked:bg-[#ECF5FF] has-checked:border-[#2C7FFF] w-full rounded-lg cursor-pointer group">
+                                        <input
+                                            type="radio"
+                                            {...register("role")}
+                                            value="driver"
+                                            className="w-4 h-4 appearance-none rounded-full border border-[#D0D0D0] checked:bg-[#2C7FFF] checked:border-[#2C7FFF]"
+                                        />
+                                        <span className="font-medium text-sm text-black-800">Driver</span>
+                                    </label>
+
+                                    <label className="flex items-center gap-2 py-3.5 px-4 bg-[#F9F9F9] hover:bg-[#ECF5FF] border border-[#F9F9F9] hover:border-[#8EC7FF] has-checked:bg-[#ECF5FF] has-checked:border-[#2C7FFF] w-full rounded-lg cursor-pointer group">
+                                        <input
+                                            type="radio"
+                                            {...register("role")}
+                                            value="host"
+                                            className="w-4 h-4 appearance-none rounded-full border border-[#D0D0D0] checked:bg-[#2C7FFF] checked:border-[#2C7FFF]"
+                                        />
+                                        <span className="font-medium text-sm text-black-800">Host</span>
+                                    </label>
+                                </div>
+                                {errors.role && (
+                                    <Typography variant="chip" className="text-red-500">
+                                        {errors.role.message}
+                                    </Typography>
+                                )}
+                            </div>
+
+                            {/* Submit Button */}
+                            <Button
+                                text={isLoading ? "Creating Account..." : "Sign Up"}
+                                type="submit"
+                                variant="lg"
+                                bg="#d9f99d"
+                                color="#101010"
+                                hoverBg={isLoading ? "#d9f99d" : "#bef264"}
+                                className={`w-full ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+                                icon={isLoading ? <Spinner size="sm" color="#101010" /> : undefined}
+                                iconPosition="left"
+                            />
+                        </form>
+
+                        {/* Login Link */}
+                        <div className="text-center">
+                            <Typography variant="para" className="text-black-700">
+                                Already have an account?{" "}
+                                <Link href="/login" className="text-[#2C7FFF] hover:underline font-semibold">
+                                    Login
+                                </Link>
+                            </Typography>
+                        </div>
+                    </div>
                 </div>
-                {errors.role && (
-                  <Typography variant="chip" className="text-red-500">
-                    {errors.role.message}
-                  </Typography>
-                )}
-              </div>
-
-              {/* Submit Button */}
-              <Button
-                text={isLoading ? "Creating Account..." : "Sign Up"}
-                type="submit"
-                variant="lg"
-                bg="#365314"
-                color="#FFFFFF"
-                hoverBg="#101010"
-                className="w-full"
-              />
-            </form>
-
-            {/* Login Link */}
-            <div className="text-center">
-              <Typography variant="para" className="text-black-700">
-                Already have an account?{" "}
-                <Link href="/login" className="text-[#2C7FFF] hover:underline font-semibold">
-                  Login
-                </Link>
-              </Typography>
-            </div>
-          </div>
-        </div>
-      </Container>
-    </section>
-  );
+            </Container>
+        </section>
+    );
 }

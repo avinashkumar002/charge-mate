@@ -11,6 +11,7 @@ import InputGroup from "@/components/InputGroup/InputGroup";
 import EmailIcon from "@/assets/svgs/EmailIcon";
 import { loginSchema, LoginFormValues } from "@/schemas/authSchema";
 import { supabase } from "@/lib/supabase/client";
+import Spinner from "@/components/Spinner/Spinner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,86 +27,86 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-  setIsLoading(true);
-  setError("");
+    setIsLoading(true);
+    setError("");
 
-  try {
-    console.log("🔐 Attempting login on client...");
-    
-    // Login with Supabase directly (client-side)
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      console.log(" Attempting login on client...");
 
-    if (authError || !authData.user) {
-      throw new Error("Invalid email or password");
+      // Login with Supabase directly (client-side)
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (authError || !authData.user) {
+        throw new Error("Invalid email or password");
+      }
+
+      console.log(" Auth successful, user:", authData.user.id);
+
+      // Fetch user role from our database
+      const response = await fetch(`/api/user/${authData.user.id}`);
+      const userData = await response.json();
+
+      console.log("User data:", userData);
+
+      // Redirect based on role
+      if (userData.role === "driver") {
+        router.push("/driver");
+      } else {
+        router.push("/host");
+      }
+
+      router.refresh();
+    } catch (err: any) {
+      console.error("💥 Login error:", err);
+      setError(err.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    console.log("✅ Auth successful, user:", authData.user.id);
+  // const onSubmit = async (data: LoginFormValues) => {
+  //   setIsLoading(true);
+  //   setError("");
 
-    // Fetch user role from our database
-    const response = await fetch(`/api/user/${authData.user.id}`);
-    const userData = await response.json();
-    
-    console.log("User data:", userData);
+  //   try {
+  //     console.log("🔐 Attempting login on client...");
 
-    // Redirect based on role
-    if (userData.role === "driver") {
-      router.push("/driver");
-    } else {
-      router.push("/host");
-    }
-    
-    router.refresh();
-  } catch (err: any) {
-    console.error("💥 Login error:", err);
-    setError(err.message || "Something went wrong");
-  } finally {
-    setIsLoading(false);
-  }
-};
+  //     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+  //       email: data.email,
+  //       password: data.password,
+  //     });
 
-// const onSubmit = async (data: LoginFormValues) => {
-//   setIsLoading(true);
-//   setError("");
+  //     if (authError || !authData.user) {
+  //       throw new Error("Invalid email or password");
+  //     }
 
-//   try {
-//     console.log("🔐 Attempting login on client...");
-    
-//     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-//       email: data.email,
-//       password: data.password,
-//     });
+  //     console.log("✅ Auth successful, user:", authData.user.id);
 
-//     if (authError || !authData.user) {
-//       throw new Error("Invalid email or password");
-//     }
+  //     const response = await fetch(`/api/user/${authData.user.id}`);
+  //     const userData = await response.json();
 
-//     console.log("✅ Auth successful, user:", authData.user.id);
+  //     console.log("📦 User data from API:", userData);
+  //     console.log("📋 Role is:", userData.role);
+  //     console.log("📋 Role type:", typeof userData.role);
 
-//     const response = await fetch(`/api/user/${authData.user.id}`);
-//     const userData = await response.json();
-    
-//     console.log("📦 User data from API:", userData);
-//     console.log("📋 Role is:", userData.role);
-//     console.log("📋 Role type:", typeof userData.role);
+  //     // COMMENTED OUT FOR TESTING
+  //     // if (userData.role === "driver") {
+  //     //   router.push("/driver");
+  //     // } else {
+  //     //   router.push("/host");
+  //     // }
+  //     // router.refresh();
 
-//     // COMMENTED OUT FOR TESTING
-//     // if (userData.role === "driver") {
-//     //   router.push("/driver");
-//     // } else {
-//     //   router.push("/host");
-//     // }
-//     // router.refresh();
-    
-//   } catch (err: any) {
-//     console.error("💥 Login error:", err);
-//     setError(err.message || "Something went wrong");
-//   } finally {
-//     setIsLoading(false);
-//   }
-// };
+  //   } catch (err: any) {
+  //     console.error("💥 Login error:", err);
+  //     setError(err.message || "Something went wrong");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   return (
     <section className="min-h-screen flex items-center justify-center py-12 px-4">
       <Container>
@@ -153,10 +154,12 @@ export default function LoginPage() {
                 text={isLoading ? "Logging in..." : "Login"}
                 type="submit"
                 variant="lg"
-                bg="#365314"
-                color="#FFFFFF"
-                hoverBg="#101010"
-                className="w-full"
+                bg="#d9f99d"
+                color="#101010"
+                hoverBg={isLoading ? "#d9f99d" : "#bef264"}
+                className={`w-full ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+                icon={isLoading ? <Spinner size="sm" color="#101010" /> : undefined}
+                iconPosition="left"
               />
             </form>
 
