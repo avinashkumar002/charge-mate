@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import { Toaster } from "react-hot-toast";
+import StoreProvider from "@/store/StoreProvider";
+
 
 const inter = Inter({
   subsets: ["latin"],
@@ -79,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="antialiased">
+        <StoreProvider>
         <Toaster 
           position="top-right"
           toastOptions={{
@@ -112,9 +115,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <Header />
-        <div className="h-[72px] lg:h-[74px] w-full"></div>
+        <div className="h-18 lg:h-18.5 w-full"></div>
         {children}
         <Footer />
+        </StoreProvider>
       </body>
     </html>
   );

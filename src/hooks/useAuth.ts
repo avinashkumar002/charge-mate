@@ -1,86 +1,74 @@
 "use client";
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-
-interface User {
-    id: string;
-    email: string;
-    name: string;
-    role: "driver" | "host";
-}
+import { supabase } from "@/lib/supabase/client";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setUser, setLoading, logout as logoutAction } from "@/store/slices/authSlice";
+import { useGetUserByIdQuery } from "@/store/services/userApi";
 
 export function useAuth() {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { user, isAuthenticated, isLoading } = useAppSelector((state) => state.auth);
 
-    useEffect(() => {
-        // Check current session
-        checkUser();
-
-        // Listen for auth changes
-        const { data: authListener } = supabase.auth.onAuthStateChange(
-            async (event, session) => {
-                if (session?.user) {
-                    await fetchUserData(session.user.id);
-                } else {
-                    setUser(null);
-                }
-                setLoading(false);
-            }
-        );
-
-        return () => {
-            authListener.subscription.unsubscribe();
-        };
-    }, []);
-
-    async function checkUser() {
-        console.log(" Checking user session...");
-        const { data: { user: authUser }, error } = await supabase.auth.getUser();
-
-        console.log("Auth user:", authUser);
-        console.log("Auth error:", error);
-
-        if (authUser) {
-            console.log(" User found, fetching data for:", authUser.id);
-            await fetchUserData(authUser.id);
+  const checkUser = useCallback(async () => {
+    try {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      
+      if (authUser) {
+        // Fetch user data from our database
+        const response = await fetch(`/api/user/${authUser.id}`);
+        if (response.ok) {
+          const userData = await response.json();
+          dispatch(setUser(userData));
         } else {
-            console.log(" No user session found");
+          dispatch(setUser(null));
         }
-        setLoading(false);
+      } else {
+        dispatch(setUser(null));
+      }
+    } catch (error) {
+      console.error("Error checking user:", error);
+      dispatch(setUser(null));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Only check if we're still loading
+    if (isLoading) {
+      checkUser();
     }
 
-    async function fetchUserData(userId: string) {
-        try {
-            console.log("📡 Fetching user data from API:", `/api/user/${userId}`);
-            const response = await fetch(`/api/user/${userId}`);
-            console.log("API response status:", response.status);
-
-            if (response.ok) {
-                const userData = await response.json();
-                console.log("✅ User data fetched:", userData);
-                setUser(userData);
-            } else {
-                console.log("❌ API failed:", await response.text());
-            }
-        } catch (error) {
-            console.error(" Error fetching user data:", error);
-            setLoading(false);
+    // Listen for auth changes
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_IN" && session?.user) {
+          const response = await fetch(`/api/user/${session.user.id}`);
+          if (response.ok) {
+            const userData = await response.json();
+            dispatch(setUser(userData));
+          }
+        } else if (event === "SIGNED_OUT") {
+          dispatch(logoutAction());
         }
-    }
+      }
+    );
 
-    async function logout() {
-        await supabase.auth.signOut();
-        setUser(null);
-        router.push("/");
-    }
-
-    return {
-        user,
-        loading,
-        isAuthenticated: !!user,
-        logout,
+    return () => {
+      authListener.subscription.unsubscribe();
     };
+  }, [isLoading, checkUser, dispatch]);
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    dispatch(logoutAction());
+    router.push("/");
+  };
+
+  return {
+    user,
+    loading: isLoading,
+    isAuthenticated,
+    logout,
+  };
 }
