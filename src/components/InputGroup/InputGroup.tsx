@@ -5,7 +5,7 @@ import { useState } from "react";
 interface InputGroupProps {
   placeholder?: string;
   type?: string;
-  Icon: React.FC<{ stroke: string }>;
+  Icon?: React.FC<{ stroke: string }>;
   error?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
@@ -22,12 +22,14 @@ const InputGroup: React.FC<InputGroupProps> = ({ placeholder = "Your name", type
     <div className="flex flex-col gap-1">
       {/* Wrapper */}
       <div
-        className={`py-[15px] px-[18px] md:p-[18px] border-[1.5px] rounded-xl flex gap-2.5 items-center ${error ? "border-red-500" : "border-[#365314]"
+        className={`py-3.75 px-4.5 md:p-4.5 border-[1.5px] rounded-xl flex gap-2.5 items-center ${error ? "border-red-500" : "border-[#365314]"
           }`}
       >
-        <div className="min-w-5">
-          <Icon stroke={strokeColor} />
-        </div>
+        {Icon && (
+          <div className="min-w-5">
+            <Icon stroke={strokeColor} />
+          </div>
+        )}
         <input
           type={type}
           placeholder={placeholder}
