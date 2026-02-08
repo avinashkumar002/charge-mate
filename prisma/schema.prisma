@@ -27,6 +27,7 @@ model Charger {
   pincode         String
   price_per_hour  Int
   charger_type    String
+  power_output    Float
   photo_url       String?
   available_start String   // "09:00"
   available_end   String   // "21:00"
