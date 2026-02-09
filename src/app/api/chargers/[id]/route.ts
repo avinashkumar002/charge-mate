@@ -55,6 +55,9 @@ export async function PUT(
       available_end,
     } = validatedData;
 
+    // Get photo_url from body (not in schema validation)
+    const photo_url = body.photo_url || null;
+
     // Update charger in database
     const charger = await prisma.charger.update({
       where: { id },
@@ -67,6 +70,7 @@ export async function PUT(
         power_output,
         available_start,
         available_end,
+        photo_url,  
       },
     });
 

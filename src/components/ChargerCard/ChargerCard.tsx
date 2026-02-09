@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
 import { CHARGER_TYPES, POWER_OUTPUTS } from "@/schemas/chargerSchema";
@@ -13,6 +14,7 @@ interface Charger {
   available_start: string;
   available_end: string;
   status: string;
+  photo_url?: string | null;
 }
 
 interface ChargerCardProps {
@@ -22,13 +24,24 @@ interface ChargerCardProps {
 }
 
 export default function ChargerCard({ charger, onEdit, onDelete }: ChargerCardProps) {
-  // Get display labels
   const chargerTypeLabel = CHARGER_TYPES.find(t => t.value === charger.charger_type)?.label || charger.charger_type;
   const powerOutputLabel = POWER_OUTPUTS.find(p => p.value === charger.power_output)?.label || `${charger.power_output} kW`;
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-[#E5E5E5] hover:border-[#d9f99d] transition-colors">
-      <div className="flex flex-col gap-4">
+    <div className="bg-white rounded-xl overflow-hidden border border-[#E5E5E5] hover:border-[#d9f99d] transition-colors">
+      {/* Image Section */}
+      {charger.photo_url && (
+        <div className="relative w-full h-48 bg-[#F9F9F9]">
+          <Image
+            src={charger.photo_url}
+            alt={charger.title}
+            fill
+            className="object-cover"
+          />
+        </div>
+      )}
+
+      <div className="p-6 flex flex-col gap-4">
         {/* Header */}
         <div className="flex justify-between items-start">
           <div>

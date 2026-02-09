@@ -8,6 +8,7 @@ import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
 import InputGroup from "@/components/InputGroup/InputGroup";
 import SelectGroup from "@/components/SelectGroup/SelectGroup";
+import ImageUpload from "@/components/ImageUpload/ImageUpload";
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
 import Spinner from "@/components/Spinner/Spinner";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,13 +18,14 @@ import {
   CHARGER_TYPES,
   POWER_OUTPUTS,
   TIME_SLOTS,
-} from "@/schemas/chargerSchema"
+} from "@/schemas/chargerSchema";
 
 export default function AddChargerPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
 
   const {
     register,
@@ -54,6 +56,7 @@ export default function AddChargerPage() {
         body: JSON.stringify({
           ...data,
           host_id: user?.id,
+          photo_url: photoUrl,
         }),
       });
 
@@ -65,7 +68,6 @@ export default function AddChargerPage() {
         return;
       }
 
-      // Redirect to host dashboard
       router.push("/host");
       router.refresh();
     } catch (err: any) {
@@ -75,7 +77,6 @@ export default function AddChargerPage() {
     }
   };
 
-  // Convert options for SelectGroup
   const chargerTypeOptions = CHARGER_TYPES.map((type) => ({
     value: type.value,
     label: type.label,
@@ -115,7 +116,6 @@ export default function AddChargerPage() {
 
             {/* Form Card */}
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E5E5]">
-              {/* Error Message */}
               {error && (
                 <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
                   <Typography variant="para" className="text-red-600">
@@ -125,6 +125,12 @@ export default function AddChargerPage() {
               )}
 
               <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+                {/* Image Upload */}
+                <ImageUpload
+                  value={photoUrl}
+                  onChange={setPhotoUrl}
+                />
+
                 {/* Title */}
                 <InputGroup
                   placeholder="Charger Title (e.g., Home Charger - Koramangala)"

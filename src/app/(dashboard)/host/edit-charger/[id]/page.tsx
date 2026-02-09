@@ -8,6 +8,7 @@ import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
 import InputGroup from "@/components/InputGroup/InputGroup";
 import SelectGroup from "@/components/SelectGroup/SelectGroup";
+import ImageUpload from "@/components/ImageUpload/ImageUpload";
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
 import Spinner from "@/components/Spinner/Spinner";
 import {
@@ -28,6 +29,7 @@ export default function EditChargerPage({ params }: PageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
 
   const {
     register,
@@ -56,6 +58,8 @@ export default function EditChargerPage({ params }: PageProps) {
             available_start: charger.available_start,
             available_end: charger.available_end,
           });
+          // Set photo URL
+          setPhotoUrl(charger.photo_url || "");
         } else {
           setError("Charger not found");
         }
@@ -77,7 +81,10 @@ export default function EditChargerPage({ params }: PageProps) {
       const response = await fetch(`/api/chargers/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          photo_url: photoUrl,
+        }),
       });
 
       const result = await response.json();
@@ -97,7 +104,6 @@ export default function EditChargerPage({ params }: PageProps) {
     }
   };
 
-  // Convert options for SelectGroup
   const chargerTypeOptions = CHARGER_TYPES.map((type) => ({
     value: type.value,
     label: type.label,
@@ -145,7 +151,6 @@ export default function EditChargerPage({ params }: PageProps) {
 
             {/* Form Card */}
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E5E5]">
-              {/* Error Message */}
               {error && (
                 <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
                   <Typography variant="para" className="text-red-600">
@@ -155,6 +160,12 @@ export default function EditChargerPage({ params }: PageProps) {
               )}
 
               <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+                {/* Image Upload */}
+                <ImageUpload
+                  value={photoUrl}
+                  onChange={setPhotoUrl}
+                />
+
                 {/* Title */}
                 <InputGroup
                   placeholder="Charger Title (e.g., Home Charger - Koramangala)"
@@ -238,7 +249,7 @@ export default function EditChargerPage({ params }: PageProps) {
                   </div>
                 </div>
 
-                {/* Submit Button */}
+                {/* Submit Buttons */}
                 <div className="mt-4 flex gap-3">
                   <Button
                     text="Cancel"

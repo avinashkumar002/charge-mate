@@ -19,6 +19,7 @@ export async function POST(request: Request) {
       power_output,
       available_start,
       available_end,
+      photo_url,  // Add this line
     } = validatedData;
 
     const host_id = body.host_id;
@@ -43,6 +44,7 @@ export async function POST(request: Request) {
         power_output,
         available_start,
         available_end,
+        photo_url: photo_url || null,  // Add this line
         status: "active",
       },
     });
