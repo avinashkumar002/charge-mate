@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
 import { chargerSchema } from "@/schemas/chargerSchema";
 
-// GET - Fetch single charger
+// GET - Fetch single charger with host info
 export async function GET(
   request: Request,
   context: { params: Promise<{ id: string }> }
@@ -12,6 +12,14 @@ export async function GET(
 
     const charger = await prisma.charger.findUnique({
       where: { id },
+      include: {
+        host: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
 
     if (!charger) {
@@ -41,7 +49,6 @@ export async function PUT(
     const { id } = await context.params;
     const body = await request.json();
 
-    // Validate request data
     const validatedData = chargerSchema.parse(body);
 
     const {
@@ -55,10 +62,8 @@ export async function PUT(
       available_end,
     } = validatedData;
 
-    // Get photo_url from body (not in schema validation)
     const photo_url = body.photo_url || null;
 
-    // Update charger in database
     const charger = await prisma.charger.update({
       where: { id },
       data: {
@@ -70,7 +75,7 @@ export async function PUT(
         power_output,
         available_start,
         available_end,
-        photo_url,  
+        photo_url,
       },
     });
 
