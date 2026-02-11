@@ -88,7 +88,7 @@ export default function HostDashboard() {
     <ProtectedRoute allowedRole="host">
       <section className="min-h-screen py-20 bg-[#FAFAFA]">
         <Container>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             {/* Welcome Card */}
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E5E5]">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
