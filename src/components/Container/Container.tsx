@@ -15,9 +15,9 @@ const Container: React.FC<ContainerProps> = ({ children, className = "",pl = "pl
         mx-auto w-full ${pl} ${pr}
         sm:max-w-xl
         md:max-w-3xl
-        lg:max-w-[992px]
-        xl:max-w-[1200px]
-        2xl:max-w-[1208px]
+        lg:max-w-248
+        xl:max-w-300
+        2xl:max-w-302
         ${className}
       `}
       style={{
