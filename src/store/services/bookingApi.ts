@@ -4,8 +4,8 @@ import type { Booking, CreateBookingInput } from "@/types/booking";
 export const bookingApi = createApi({
   reducerPath: "bookingApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  tagTypes: ["Booking", "BookingList"],
-  
+  tagTypes: ["Booking", "BookingList", "HostBookingList"],
+
   endpoints: (builder) => ({
     // Get bookings for driver
     getDriverBookings: builder.query<Booking[], string>({
@@ -17,6 +17,18 @@ export const bookingApi = createApi({
               { type: "BookingList", id: "DRIVER" },
             ]
           : [{ type: "BookingList", id: "DRIVER" }],
+    }),
+
+    // Get bookings for host
+    getHostBookings: builder.query<Booking[], string>({
+      query: (hostId) => `/bookings/host?hostId=${hostId}`,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Booking" as const, id })),
+              { type: "HostBookingList", id: "HOST" },
+            ]
+          : [{ type: "HostBookingList", id: "HOST" }],
     }),
 
     // Get single booking
@@ -32,7 +44,10 @@ export const bookingApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: "BookingList", id: "DRIVER" }],
+      invalidatesTags: [
+        { type: "BookingList", id: "DRIVER" },
+        { type: "HostBookingList", id: "HOST" },
+      ],
     }),
 
     // Cancel booking
@@ -45,6 +60,35 @@ export const bookingApi = createApi({
       invalidatesTags: (result, error, id) => [
         { type: "Booking", id },
         { type: "BookingList", id: "DRIVER" },
+        { type: "HostBookingList", id: "HOST" },
+      ],
+    }),
+
+    // Accept booking (host)
+    acceptBooking: builder.mutation<{ success: boolean }, string>({
+      query: (id) => ({
+        url: `/bookings/${id}`,
+        method: "PUT",
+        body: { status: "confirmed" },
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: "Booking", id },
+        { type: "HostBookingList", id: "HOST" },
+        { type: "BookingList", id: "DRIVER" },
+      ],
+    }),
+
+    // Reject booking (host)
+    rejectBooking: builder.mutation<{ success: boolean }, string>({
+      query: (id) => ({
+        url: `/bookings/${id}`,
+        method: "PUT",
+        body: { status: "cancelled" },
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: "Booking", id },
+        { type: "HostBookingList", id: "HOST" },
+        { type: "BookingList", id: "DRIVER" },
       ],
     }),
   }),
@@ -52,7 +96,10 @@ export const bookingApi = createApi({
 
 export const {
   useGetDriverBookingsQuery,
+  useGetHostBookingsQuery,
   useGetBookingByIdQuery,
   useCreateBookingMutation,
   useCancelBookingMutation,
+  useAcceptBookingMutation,
+  useRejectBookingMutation,
 } = bookingApi;

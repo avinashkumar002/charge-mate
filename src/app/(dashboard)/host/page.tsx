@@ -106,6 +106,16 @@ export default function HostDashboard() {
                   </div>
                 </div>
                 <div className="flex gap-3">
+                  <Link href="/host/bookings">
+                    <Button
+                      text="📋 Bookings"
+                      bg="#FFFFFF"
+                      color="#365314"
+                      hoverBg="#F9F9F9"
+                      boxShadow="inset 0 0 0 1px #E5E5E5"
+                      variant="sm"
+                    />
+                  </Link>
                   <Link href="/host/add-charger">
                     <Button
                       text="+ Add Charger"

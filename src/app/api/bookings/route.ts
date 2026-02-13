@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
         start_time,
         end_time,
         total_price,
-        status: "confirmed",
+        status: "pending",
       },
       include: {
         charger: {

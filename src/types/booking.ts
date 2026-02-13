@@ -13,10 +13,16 @@ export interface Booking {
     title: string;
     address: string;
     photo_url: string | null;
-    host: {
+    price_per_hour?: number;
+    host?: {
       id: string;
       name: string;
     };
+  };
+  driver?: {
+    id: string;
+    name: string;
+    email: string;
   };
 }
 
