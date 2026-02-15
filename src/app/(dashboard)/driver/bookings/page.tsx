@@ -1,4 +1,5 @@
 "use client";
+import toast from "react-hot-toast";
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Container from "@/components/Container/Container";
@@ -9,6 +10,10 @@ import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
 import BookingCard from "@/components/BookingCard/BookingCard";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetDriverBookingsQuery, useCancelBookingMutation } from "@/store/services/bookingApi";
+// import { useDriverBookingNotifications } from "@/hooks/useBookingNotifications";
+// import { useDriverBookingRealtime } from "@/hooks/useBookingRealtime";
+import { markAsSelfMutated } from "@/lib/realtimeUtils";
+
 
 type FilterStatus = "all" | "upcoming" | "completed" | "cancelled";
 
@@ -18,9 +23,9 @@ export default function MyBookingsPage() {
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const { data: bookings, isLoading, isError, refetch } = useGetDriverBookingsQuery(
-    user?.id || "",
-    { skip: !user?.id }
-  );
+  user?.id || "",
+  { skip: !user?.id }
+);
 
   const [cancelBooking] = useCancelBookingMutation();
 
@@ -52,17 +57,19 @@ export default function MyBookingsPage() {
   }, [bookings, filter]);
 
   const handleCancel = async (bookingId: string) => {
-    if (!confirm("Are you sure you want to cancel this booking?")) return;
+  if (!confirm("Are you sure you want to cancel this booking?")) return;
 
-    setCancellingId(bookingId);
-    try {
-      await cancelBooking(bookingId).unwrap();
-    } catch (error) {
-      alert("Failed to cancel booking");
-    } finally {
-      setCancellingId(null);
-    }
-  };
+  setCancellingId(bookingId);
+  try {
+    markAsSelfMutated(bookingId);
+    await cancelBooking(bookingId).unwrap();
+    toast.success("Booking cancelled");
+  } catch (error) {
+    toast.error("Failed to cancel booking");
+  } finally {
+    setCancellingId(null);
+  }
+};
 
   // Stats
   const stats = useMemo(() => {
@@ -157,11 +164,10 @@ export default function MyBookingsPage() {
                 <button
                   key={tab}
                   onClick={() => setFilter(tab)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium capitalize whitespace-nowrap transition-colors ${
-                    filter === tab
-                      ? "bg-[#d9f99d] text-[#365314]"
-                      : "bg-white text-black-600 hover:bg-[#F9F9F9] border border-[#E5E5E5]"
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium capitalize whitespace-nowrap transition-colors ${filter === tab
+                    ? "bg-[#d9f99d] text-[#365314]"
+                    : "bg-white text-black-600 hover:bg-[#F9F9F9] border border-[#E5E5E5]"
+                    }`}
                 >
                   {tab}
                 </button>

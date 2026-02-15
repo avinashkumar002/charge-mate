@@ -165,10 +165,7 @@ export async function GET(request: NextRequest) {
           },
         },
       },
-      orderBy: [
-        { booking_date: "desc" },
-        { start_time: "desc" },
-      ],
+      orderBy: { created_at: "desc" },
     });
 
     // Serialize dates

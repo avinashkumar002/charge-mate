@@ -12,6 +12,7 @@ import { useGetChargerByIdQuery } from "@/store/services/chargerApi";
 import { useCreateBookingMutation } from "@/store/services/bookingApi";
 import { generateTimeSlots, calculateBookingPrice } from "@/schemas/bookingSchema";
 import { CHARGER_TYPES } from "@/schemas/chargerSchema";
+import toast from "react-hot-toast";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -59,7 +60,7 @@ export default function BookChargerPage({ params }: PageProps) {
     setError("");
 
     try {
-      const result = await createBooking({
+      await createBooking({
         charger_id: charger.id,
         driver_id: user.id,
         booking_date: dateParam,
@@ -68,8 +69,8 @@ export default function BookChargerPage({ params }: PageProps) {
         total_price: totalPrice,
       }).unwrap();
 
-      // Redirect to confirmation page
-      router.push(`/driver/bookings/${result.booking.id}?new=true`);
+      toast.success("Booking request sent! ⚡");
+      router.push("/driver/bookings");
 
     } catch (err: any) {
       setError(err.data?.error || "Failed to create booking");
@@ -98,11 +99,11 @@ export default function BookChargerPage({ params }: PageProps) {
 
   const formattedDate = dateParam
     ? new Date(dateParam).toLocaleDateString("en-IN", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
   return (

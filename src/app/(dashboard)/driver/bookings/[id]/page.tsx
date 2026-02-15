@@ -9,6 +9,10 @@ import Button from "@/components/Button/Button";
 import Spinner from "@/components/Spinner/Spinner";
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
 import { useGetBookingByIdQuery, useCancelBookingMutation } from "@/store/services/bookingApi";
+import toast from "react-hot-toast";
+// import { useDriverBookingRealtime } from "@/hooks/useBookingRealtime";
+import { useAuth } from "@/hooks/useAuth";
+import { markAsSelfMutated } from "@/lib/realtimeUtils";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -19,20 +23,24 @@ export default function BookingDetailsPage({ params }: PageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isNew = searchParams.get("new") === "true";
+  const { user } = useAuth();
 
   const { data: booking, isLoading, isError } = useGetBookingByIdQuery(id);
   const [cancelBooking, { isLoading: isCancelling }] = useCancelBookingMutation();
 
-  const handleCancel = async () => {
-    if (!confirm("Are you sure you want to cancel this booking?")) return;
 
-    try {
-      await cancelBooking(id).unwrap();
-      router.refresh();
-    } catch (error) {
-      alert("Failed to cancel booking");
-    }
-  };
+  const handleCancel = async () => {
+  if (!confirm("Are you sure you want to cancel this booking?")) return;
+
+  try {
+    markAsSelfMutated(id);
+    await cancelBooking(id).unwrap();
+    toast.success("Booking cancelled");
+    router.push("/driver/bookings");
+  } catch (error) {
+    toast.error("Failed to cancel booking");
+  }
+};
 
   if (isLoading) {
     return (

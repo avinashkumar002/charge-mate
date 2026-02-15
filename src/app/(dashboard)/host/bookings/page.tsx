@@ -1,4 +1,5 @@
 "use client";
+import toast from "react-hot-toast";
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Container from "@/components/Container/Container";
@@ -13,6 +14,9 @@ import {
   useAcceptBookingMutation,
   useRejectBookingMutation,
 } from "@/store/services/bookingApi";
+// import { useHostBookingNotifications } from "@/hooks/useBookingNotifications";
+// import { useHostBookingRealtime } from "@/hooks/useBookingRealtime";
+import { markAsSelfMutated } from "@/lib/realtimeUtils";
 
 type FilterStatus = "all" | "pending" | "confirmed" | "completed" | "cancelled";
 
@@ -60,9 +64,11 @@ export default function HostBookingsPage() {
     setProcessingId(bookingId);
     setProcessingAction("accept");
     try {
+      markAsSelfMutated(bookingId);
       await acceptBooking(bookingId).unwrap();
+      toast.success("Booking accepted! ✅");
     } catch (error) {
-      alert("Failed to accept booking");
+      toast.error("Failed to accept booking");
     } finally {
       setProcessingId(null);
       setProcessingAction(null);
@@ -75,9 +81,11 @@ export default function HostBookingsPage() {
     setProcessingId(bookingId);
     setProcessingAction("reject");
     try {
+      markAsSelfMutated(bookingId);
       await rejectBooking(bookingId).unwrap();
+      toast.success("Booking rejected");
     } catch (error) {
-      alert("Failed to reject booking");
+      toast.error("Failed to reject booking");
     } finally {
       setProcessingId(null);
       setProcessingAction(null);
@@ -168,11 +176,10 @@ export default function HostBookingsPage() {
                 <button
                   key={tab}
                   onClick={() => setFilter(tab)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium capitalize whitespace-nowrap transition-colors ${
-                    filter === tab
-                      ? "bg-[#d9f99d] text-[#365314]"
-                      : "bg-white text-black-600 hover:bg-[#F9F9F9] border border-[#E5E5E5]"
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium capitalize whitespace-nowrap transition-colors ${filter === tab
+                    ? "bg-[#d9f99d] text-[#365314]"
+                    : "bg-white text-black-600 hover:bg-[#F9F9F9] border border-[#E5E5E5]"
+                    }`}
                 >
                   {tab}
                   {tab === "pending" && stats.pending > 0 && (
