@@ -13,10 +13,13 @@ import ProfileIcon from "@/assets/svgs/ProfileIcon";
 import { signupSchema, SignupFormValues } from "@/schemas/authSchema";
 import { supabase } from "@/lib/supabase/client";
 import Spinner from "@/components/Spinner/Spinner";
+import { useAppDispatch } from "@/store/hooks";
+import { setUser } from "@/store/slices/authSlice";
 
 function SignupForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const dispatch = useAppDispatch();
     const roleFromUrl = searchParams.get("role") as "driver" | "host" | null;
 
     const [isLoading, setIsLoading] = useState(false);
@@ -64,12 +67,18 @@ function SignupForm() {
                 throw new Error(result.error || "Failed to save user data");
             }
 
+            dispatch(setUser({
+                id: authData.user.id,
+                email: data.email,
+                name: data.name,
+                role: data.role,
+            }));
+
             if (data.role === "driver") {
                 router.push("/driver");
             } else {
                 router.push("/host");
             }
-            router.refresh();
 
         } catch (err: any) {
             setError(err.message || "Something went wrong");

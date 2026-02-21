@@ -14,7 +14,7 @@ export function useAuth() {
   const checkUser = useCallback(async () => {
     try {
       const { data: { user: authUser } } = await supabase.auth.getUser();
-      
+
       if (authUser) {
         // Fetch user data from our database
         const response = await fetch(`/api/user/${authUser.id}`);
@@ -43,11 +43,15 @@ export function useAuth() {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === "SIGNED_IN" && session?.user) {
+          // Delay to allow signup API to save user first
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
           const response = await fetch(`/api/user/${session.user.id}`);
           if (response.ok) {
             const userData = await response.json();
             dispatch(setUser(userData));
           }
+          // If not ok, don't set null — signup page handles it via manual dispatch
         } else if (event === "SIGNED_OUT") {
           dispatch(logoutAction());
         }
