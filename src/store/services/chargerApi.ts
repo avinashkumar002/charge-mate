@@ -1,9 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { authBaseQuery } from "./baseQuery";
 import type { Charger, ChargerSearchParams, ChargerListResponse } from "@/types/charger";
 
 export const chargerApi = createApi({
   reducerPath: "chargerApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+  baseQuery: authBaseQuery,
   tagTypes: ["Charger", "ChargerList"],
   
   endpoints: (builder) => ({

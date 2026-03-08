@@ -19,6 +19,7 @@ import {
   POWER_OUTPUTS,
   TIME_SLOTS,
 } from "@/schemas/chargerSchema";
+import { authFetch } from "@/lib/auth/authFetch";
 
 export default function AddChargerPage() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function AddChargerPage() {
     setError("");
 
     try {
-      const response = await fetch("/api/chargers", {
+      const response = await authFetch("/api/chargers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

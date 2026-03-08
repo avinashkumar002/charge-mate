@@ -18,6 +18,7 @@ import {
   POWER_OUTPUTS,
   TIME_SLOTS,
 } from "@/schemas/chargerSchema";
+import { authFetch } from "@/lib/auth/authFetch";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -78,7 +79,7 @@ export default function EditChargerPage({ params }: PageProps) {
     setError("");
 
     try {
-      const response = await fetch(`/api/chargers/${id}`, {
+      const response = await authFetch(`/api/chargers/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

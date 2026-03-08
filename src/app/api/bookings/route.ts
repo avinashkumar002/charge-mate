@@ -1,25 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
 import { bookingSchema } from "@/schemas/bookingSchema";
+import { getAuthUser, unauthorizedResponse, forbiddenResponse } from "@/lib/auth/protectApi";
 
-// POST - Create new booking
+// POST - Create new booking (driver only)
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const authUser = await getAuthUser(request);
+    if (!authUser) return unauthorizedResponse();
+    if (authUser.role !== "driver") return forbiddenResponse("Only drivers can create bookings");
 
-    // Validate request data
+    const body = await request.json();
     const validatedData = bookingSchema.parse(body);
 
     const { charger_id, booking_date, start_time, end_time } = validatedData;
-    const driver_id = body.driver_id;
     const total_price = body.total_price;
-
-    if (!driver_id) {
-      return NextResponse.json(
-        { error: "Driver ID is required" },
-        { status: 400 }
-      );
-    }
 
     // Check if charger exists and is active
     const charger = await prisma.charger.findUnique({
@@ -76,11 +71,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create booking
+    // Use authenticated user's ID as driver_id
     const booking = await prisma.booking.create({
       data: {
         charger_id,
-        driver_id,
+        driver_id: authUser.id,
         booking_date: new Date(booking_date),
         start_time,
         end_time,
@@ -127,21 +122,22 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET - Fetch bookings for a driver
+// GET - Fetch bookings for a driver (own bookings only)
 export async function GET(request: NextRequest) {
   try {
+    const authUser = await getAuthUser(request);
+    if (!authUser) return unauthorizedResponse();
+
     const { searchParams } = new URL(request.url);
     const driverId = searchParams.get("driverId");
     const status = searchParams.get("status");
 
-    if (!driverId) {
-      return NextResponse.json(
-        { error: "Driver ID is required" },
-        { status: 400 }
-      );
+    // Can only fetch your own bookings
+    if (driverId !== authUser.id) {
+      return forbiddenResponse("You can only view your own bookings");
     }
 
-    const where: any = { driver_id: driverId };
+    const where: any = { driver_id: authUser.id };
 
     if (status) {
       where.status = status;
@@ -168,7 +164,6 @@ export async function GET(request: NextRequest) {
       orderBy: { created_at: "desc" },
     });
 
-    // Serialize dates
     const serializedBookings = bookings.map((booking) => ({
       ...booking,
       booking_date: booking.booking_date.toISOString(),

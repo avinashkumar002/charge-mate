@@ -1,13 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
 import { chargerSchema } from "@/schemas/chargerSchema";
+import { getAuthUser, unauthorizedResponse, forbiddenResponse } from "@/lib/auth/protectApi";
 
-// POST - Create new charger
-export async function POST(request: Request) {
+// POST - Create new charger (host only)
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const authUser = await getAuthUser(request);
+    if (!authUser) return unauthorizedResponse();
+    if (authUser.role !== "host") return forbiddenResponse("Only hosts can create chargers");
 
-    // Validate request data
+    const body = await request.json();
     const validatedData = chargerSchema.parse(body);
 
     const {
@@ -19,23 +22,13 @@ export async function POST(request: Request) {
       power_output,
       available_start,
       available_end,
-      photo_url,  // Add this line
+      photo_url,
     } = validatedData;
 
-    const host_id = body.host_id;
-
-    // Check if host_id is provided
-    if (!host_id) {
-      return NextResponse.json(
-        { error: "Host ID is required" },
-        { status: 400 }
-      );
-    }
-
-    // Create charger in database
+    // Use authenticated user's ID as host_id
     const charger = await prisma.charger.create({
       data: {
-        host_id,
+        host_id: authUser.id,
         title,
         address,
         pincode,
@@ -44,7 +37,7 @@ export async function POST(request: Request) {
         power_output,
         available_start,
         available_end,
-        photo_url: photo_url || null,  // Add this line
+        photo_url: photo_url || null,
         status: "active",
       },
     });
@@ -71,8 +64,8 @@ export async function POST(request: Request) {
   }
 }
 
-// GET - Fetch chargers (for host)
-export async function GET(request: Request) {
+// GET - Fetch chargers for host
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const hostId = searchParams.get("hostId");

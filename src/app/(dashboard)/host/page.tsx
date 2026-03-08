@@ -9,6 +9,7 @@ import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
 import Spinner from "@/components/Spinner/Spinner";
 import ChargerCard from "@/components/ChargerCard/ChargerCard";
+import { authFetch } from "@/lib/auth/authFetch";
 
 interface Charger {
   id: string;
@@ -56,7 +57,7 @@ export default function HostDashboard() {
     }
 
     try {
-      const response = await fetch(`/api/chargers/${chargerId}`, {
+      const response = await authFetch(`/api/chargers/${chargerId}`, {
         method: "DELETE",
       });
 

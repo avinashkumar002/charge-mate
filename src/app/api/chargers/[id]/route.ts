@@ -1,10 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
 import { chargerSchema } from "@/schemas/chargerSchema";
+import { getAuthUser, unauthorizedResponse, forbiddenResponse } from "@/lib/auth/protectApi";
 
-// GET - Fetch single charger with host info
+// GET - Public (drivers need to browse chargers without restrictions)
 export async function GET(
-  request: Request,
+  request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -40,15 +41,33 @@ export async function GET(
   }
 }
 
-// PUT - Update charger
+// PUT - Update charger (owner only)
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await context.params;
-    const body = await request.json();
+    const authUser = await getAuthUser(request);
+    if (!authUser) return unauthorizedResponse();
+    if (authUser.role !== "host") return forbiddenResponse("Only hosts can update chargers");
 
+    const { id } = await context.params;
+
+    // Verify ownership
+    const existing = await prisma.charger.findUnique({
+      where: { id },
+      select: { host_id: true },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Charger not found" }, { status: 404 });
+    }
+
+    if (existing.host_id !== authUser.id) {
+      return forbiddenResponse("You can only edit your own chargers");
+    }
+
+    const body = await request.json();
     const validatedData = chargerSchema.parse(body);
 
     const {
@@ -88,10 +107,7 @@ export async function PUT(
     console.error("Update charger error:", error);
 
     if (error.code === "P2025") {
-      return NextResponse.json(
-        { error: "Charger not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Charger not found" }, { status: 404 });
     }
 
     if (error.name === "ZodError") {
@@ -101,24 +117,37 @@ export async function PUT(
       );
     }
 
-    return NextResponse.json(
-      { error: "Failed to update charger" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to update charger" }, { status: 500 });
   }
 }
 
-// DELETE - Delete charger
+// DELETE - Delete charger (owner only)
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authUser = await getAuthUser(request);
+    if (!authUser) return unauthorizedResponse();
+    if (authUser.role !== "host") return forbiddenResponse("Only hosts can delete chargers");
+
     const { id } = await context.params;
 
-    await prisma.charger.delete({
+    // Verify ownership
+    const existing = await prisma.charger.findUnique({
       where: { id },
+      select: { host_id: true },
     });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Charger not found" }, { status: 404 });
+    }
+
+    if (existing.host_id !== authUser.id) {
+      return forbiddenResponse("You can only delete your own chargers");
+    }
+
+    await prisma.charger.delete({ where: { id } });
 
     return NextResponse.json(
       { success: true, message: "Charger deleted" },
@@ -129,15 +158,9 @@ export async function DELETE(
     console.error("Delete charger error:", error);
 
     if (error.code === "P2025") {
-      return NextResponse.json(
-        { error: "Charger not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Charger not found" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { error: "Failed to delete charger" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to delete charger" }, { status: 500 });
   }
 }

@@ -31,27 +31,27 @@ export default function LoginPage() {
     setError("");
 
     try {
-      console.log(" Attempting login on client...");
-
-      // Login with Supabase directly (client-side)
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
       });
 
-      if (authError || !authData.user) {
+      if (authError || !authData.user || !authData.session) {
         throw new Error("Invalid email or password");
       }
 
-      console.log(" Auth successful, user:", authData.user.id);
+      const response = await fetch(`/api/user/${authData.user.id}`, {
+        headers: {
+          Authorization: `Bearer ${authData.session.access_token}`,
+        },
+      });
 
-      // Fetch user role from our database
-      const response = await fetch(`/api/user/${authData.user.id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
       const userData = await response.json();
 
-      console.log("User data:", userData);
-
-      // Redirect based on role
       if (userData.role === "driver") {
         router.push("/driver");
       } else {
@@ -60,53 +60,12 @@ export default function LoginPage() {
 
       router.refresh();
     } catch (err: any) {
-      console.error("💥 Login error:", err);
       setError(err.message || "Something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // const onSubmit = async (data: LoginFormValues) => {
-  //   setIsLoading(true);
-  //   setError("");
-
-  //   try {
-  //     console.log("🔐 Attempting login on client...");
-
-  //     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-  //       email: data.email,
-  //       password: data.password,
-  //     });
-
-  //     if (authError || !authData.user) {
-  //       throw new Error("Invalid email or password");
-  //     }
-
-  //     console.log("✅ Auth successful, user:", authData.user.id);
-
-  //     const response = await fetch(`/api/user/${authData.user.id}`);
-  //     const userData = await response.json();
-
-  //     console.log("📦 User data from API:", userData);
-  //     console.log("📋 Role is:", userData.role);
-  //     console.log("📋 Role type:", typeof userData.role);
-
-  //     // COMMENTED OUT FOR TESTING
-  //     // if (userData.role === "driver") {
-  //     //   router.push("/driver");
-  //     // } else {
-  //     //   router.push("/host");
-  //     // }
-  //     // router.refresh();
-
-  //   } catch (err: any) {
-  //     console.error("💥 Login error:", err);
-  //     setError(err.message || "Something went wrong");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
   return (
     <section className="min-h-screen flex items-center justify-center py-12 px-4">
       <Container>

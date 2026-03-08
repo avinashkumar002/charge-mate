@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import Typography from "@/components/Typography/Typography";
 import Spinner from "@/components/Spinner/Spinner";
+import { authFetch } from "@/lib/auth/authFetch";
 
 interface ImageUploadProps {
   value?: string;
@@ -36,7 +37,7 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
 
     try {
       // Get auth params from our API
-      const authRes = await fetch("/api/imagekit/auth");
+      const authRes = await authFetch("/api/imagekit/auth");
       const authParams = await authRes.json();
 
       // Prepare form data
@@ -90,6 +91,7 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
             src={value}
             alt="Charger preview"
             fill
+            sizes="100%"
             className="object-contain"
           />
           <button
@@ -124,7 +126,7 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
                 Click to upload charger photo
               </Typography>
               <Typography variant="chip" className="text-black-400">
-                JPG, PNG, WebP (max 5MB)
+                JPG, PNG, WebP (max 2MB)
               </Typography>
             </div>
           )}

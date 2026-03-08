@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setUser, setLoading, logout as logoutAction } from "@/store/slices/authSlice";
-import { useGetUserByIdQuery } from "@/store/services/userApi";
 
 export function useAuth() {
   const dispatch = useAppDispatch();
@@ -13,11 +12,14 @@ export function useAuth() {
 
   const checkUser = useCallback(async () => {
     try {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-
-      if (authUser) {
-        // Fetch user data from our database
-        const response = await fetch(`/api/user/${authUser.id}`);
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user) {
+        const response = await fetch(`/api/user/${session.user.id}`, {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
         if (response.ok) {
           const userData = await response.json();
           dispatch(setUser(userData));
@@ -34,24 +36,24 @@ export function useAuth() {
   }, [dispatch]);
 
   useEffect(() => {
-    // Only check if we're still loading
     if (isLoading) {
       checkUser();
     }
 
-    // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === "SIGNED_IN" && session?.user) {
-          // Delay to allow signup API to save user first
           await new Promise((resolve) => setTimeout(resolve, 1000));
-
-          const response = await fetch(`/api/user/${session.user.id}`);
+          
+          const response = await fetch(`/api/user/${session.user.id}`, {
+            headers: {
+              Authorization: `Bearer ${session.access_token}`,
+            },
+          });
           if (response.ok) {
             const userData = await response.json();
             dispatch(setUser(userData));
           }
-          // If not ok, don't set null — signup page handles it via manual dispatch
         } else if (event === "SIGNED_OUT") {
           dispatch(logoutAction());
         }

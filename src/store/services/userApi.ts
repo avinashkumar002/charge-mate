@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { authBaseQuery } from "./baseQuery";
 
 interface User {
   id: string;
@@ -9,7 +10,7 @@ interface User {
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+  baseQuery: authBaseQuery,
   tagTypes: ["User"],
   endpoints: (builder) => ({
     getUserById: builder.query<User, string>({

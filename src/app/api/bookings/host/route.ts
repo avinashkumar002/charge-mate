@@ -1,23 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
+import { getAuthUser, unauthorizedResponse, forbiddenResponse } from "@/lib/auth/protectApi";
 
 // GET - Fetch bookings for a host's chargers
 export async function GET(request: NextRequest) {
   try {
+    const authUser = await getAuthUser(request);
+    if (!authUser) return unauthorizedResponse();
+    if (authUser.role !== "host") return forbiddenResponse("Only hosts can view host bookings");
+
     const { searchParams } = new URL(request.url);
     const hostId = searchParams.get("hostId");
     const status = searchParams.get("status");
 
-    if (!hostId) {
-      return NextResponse.json(
-        { error: "Host ID is required" },
-        { status: 400 }
-      );
+    // Can only fetch your own charger bookings
+    if (hostId !== authUser.id) {
+      return forbiddenResponse("You can only view your own charger bookings");
     }
 
     const where: any = {
       charger: {
-        host_id: hostId,
+        host_id: authUser.id,
       },
     };
 
@@ -48,7 +51,6 @@ export async function GET(request: NextRequest) {
       orderBy: { created_at: "desc" },
     });
 
-    // Serialize dates
     const serializedBookings = bookings.map((booking) => ({
       ...booking,
       booking_date: booking.booking_date.toISOString(),
