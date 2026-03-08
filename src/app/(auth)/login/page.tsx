@@ -120,6 +120,12 @@ export default function LoginPage() {
                 icon={isLoading ? <Spinner size="sm" color="#101010" /> : undefined}
                 iconPosition="left"
               />
+              {/* Forgot Password */}
+              <div className="text-right">
+                <Link href="/forgot-password" className="text-[#2C7FFF] hover:underline text-sm font-medium">
+                  Forgot password?
+                </Link>
+              </div>
             </form>
 
             {/* Signup Link */}
