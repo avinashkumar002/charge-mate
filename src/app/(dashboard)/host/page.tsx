@@ -10,6 +10,7 @@ import Button from "@/components/Button/Button";
 import Spinner from "@/components/Spinner/Spinner";
 import ChargerCard from "@/components/ChargerCard/ChargerCard";
 import { authFetch } from "@/lib/auth/authFetch";
+import { useGetHostBookingsQuery } from "@/store/services/bookingApi";
 
 interface Charger {
   id: string;
@@ -29,6 +30,18 @@ export default function HostDashboard() {
   const { user, loading, logout } = useAuth();
   const [chargers, setChargers] = useState<Charger[]>([]);
   const [isLoadingChargers, setIsLoadingChargers] = useState(true);
+
+  // Live booking stats via RTK Query (auto-updates via Realtime)
+const { data: bookings } = useGetHostBookingsQuery(
+  user?.id || "",
+  { skip: !user?.id }
+);
+
+const pendingCount = bookings?.filter((b) => b.status === "pending").length || 0;
+const totalBookings = bookings?.length || 0;
+const totalEarned = bookings
+  ?.filter((b) => b.status === "confirmed" || b.status === "completed")
+  .reduce((sum, b) => sum + b.total_price, 0) || 0;
 
   // Fetch chargers when user is loaded
   useEffect(() => {
@@ -140,7 +153,7 @@ export default function HostDashboard() {
             </div>
 
             {/* Stats Card */}
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white rounded-xl p-6 border border-[#E5E5E5]">
                 <Typography variant="chip" className="text-black-500">
                   Total Chargers
@@ -165,7 +178,71 @@ export default function HostDashboard() {
                   0
                 </Typography>
               </div>
-            </div>
+            </div> */}
+            {/* Pending Alert */}
+{pendingCount > 0 && (
+  <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center justify-between">
+    <div className="flex items-center gap-3">
+      <span className="text-2xl">⏳</span>
+      <div>
+        <Typography variant="para" weight={600} className="text-yellow-700">
+          {pendingCount} pending request{pendingCount > 1 ? "s" : ""}
+        </Typography>
+        <Typography variant="chip" className="text-yellow-600">
+          Review and respond to requests
+        </Typography>
+      </div>
+    </div>
+    <Link href="/host/bookings">
+      <Button
+        text="View"
+        bg="#FFFFFF"
+        color="#365314"
+        hoverBg="#F9F9F9"
+        boxShadow="inset 0 0 0 1px #E5E5E5"
+        variant="sm"
+      />
+    </Link>
+  </div>
+)}
+
+{/* Stats Card */}
+<div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+  <div className="bg-white rounded-xl p-6 border border-[#E5E5E5]">
+    <Typography variant="chip" className="text-black-500">
+      Total Chargers
+    </Typography>
+    <Typography variant="h2" weight={600} className="text-black-900 mt-1">
+      {chargers.length}
+    </Typography>
+  </div>
+  <div className="bg-white rounded-xl p-6 border border-[#E5E5E5]">
+    <Typography variant="chip" className="text-black-500">
+      Active
+    </Typography>
+    <Typography variant="h2" weight={600} className="text-green-600 mt-1">
+      {chargers.filter(c => c.status === "active").length}
+    </Typography>
+  </div>
+  <Link href="/host/bookings">
+    <div className="bg-white rounded-xl p-6 border border-[#E5E5E5] hover:border-[#d9f99d] transition-colors cursor-pointer h-full">
+      <Typography variant="chip" className="text-black-500">
+        Total Bookings
+      </Typography>
+      <Typography variant="h2" weight={600} className="text-black-900 mt-1">
+        {totalBookings}
+      </Typography>
+    </div>
+  </Link>
+  <div className="bg-white rounded-xl p-6 border border-[#E5E5E5]">
+    <Typography variant="chip" className="text-black-500">
+      Total Earned
+    </Typography>
+    <Typography variant="h2" weight={600} className="text-[#365314] mt-1">
+      ₹{totalEarned}
+    </Typography>
+  </div>
+</div>
 
             {/* My Chargers Section */}
             <div className="mt-6">
