@@ -25,7 +25,7 @@ export interface TypographyProps {
   /** HTML Element to use (h1, h2, h3, p, span, div, a) */
   el?: El;
 
-  /** Typography variant based on ChargeMate design system */
+  /** Typography variant based on EvSetu design system */
   variant?: TypographyVariant;
 
   /** Custom color - can use CSS variables or hex/rgb */

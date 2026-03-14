@@ -95,7 +95,7 @@ function SignupForm() {
                         Create Your Account
                     </Typography>
                     <Typography variant="para" weight={400} className="text-black-700">
-                        Join ChargeMate and start {roleFromUrl === "host" ? "earning" : "charging"} today
+                        Join EvSetu and start {roleFromUrl === "host" ? "earning" : "charging"} today
                     </Typography>
                 </div>
 

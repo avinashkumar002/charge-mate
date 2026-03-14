@@ -37,7 +37,7 @@ const Footer: FC = () => {
                                     </Typography>
                                 </div>
                             </div>
-                            <div className="flex justify-between lg:justify-start lg:gap-[124px]">
+                            <div className="flex justify-between lg:justify-start lg:gap-31">
                                 <div className="flex flex-col gap-5">
                                     <div className="">
                                         <Typography variant="para" weight={600} className="text-[#132457]">
@@ -95,7 +95,7 @@ const Footer: FC = () => {
                         <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
                             <div className="flex gap-8 lg:gap-10">
                                 <Typography variant="para" weight={600} className="text-[#132457]">
-                                    © 2025 ChargeMate
+                                    © 2025 EvSetu
                                 </Typography>
 
                                 <Link href="">

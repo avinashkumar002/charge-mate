@@ -216,7 +216,7 @@ const WaitlistPage: FC = () => {
                                     Find Smart, Reliable EV Charging — Anytime, <span className="text-lime-900"> Anywhere.</span>
                                 </Typography>
                                 <Typography variant="body" weight={400} lineHeight={isMd ? 28 : 24} className="text-black-900 text-center">
-                                    ChargeMate connects <b> EV Drivers and Charger Hosts</b> with verified, private EV charging points nearby. No more range anxiety. Save time and power.
+                                    EvSetu connects <b> EV Drivers and Charger Hosts</b> with verified, private EV charging points nearby. No more range anxiety. Save time and power.
                                 </Typography>
                             </div>
                             <div className="flex gap-2.5 justify-center md:justify-start md:gap-6 flex-wrap">

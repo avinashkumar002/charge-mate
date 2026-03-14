@@ -18,12 +18,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!charger) {
     return {
-      title: "Charger Not Found | ChargeMate",
+      title: "Charger Not Found | EvSetu",
     };
   }
 
   return {
-    title: `${charger.title} | ChargeMate`,
+    title: `${charger.title} | EvSetu`,
     description: `Book EV charging at ${charger.address}. ₹${charger.price_per_hour}/hour.`,
     openGraph: {
       title: charger.title,

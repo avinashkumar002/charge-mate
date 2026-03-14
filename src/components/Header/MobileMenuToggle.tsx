@@ -36,7 +36,7 @@ export default function MobileMenuToggle({ logo, navItems }: MobileMenuTogglePro
       >
         <div className="flex justify-between p-4 backdrop-blur-[20px]">
           <Link href="/" className="flex items-center gap-2 relative w-31.5 h-9.5">
-            <Image src={logo} alt="ChargeMate Logo" fill className="object-contain" sizes="100%"  />
+            <Image src={logo} alt="EvSetu Logo" fill className="object-contain" sizes="100%"  />
           </Link>
 
           <button onClick={() => setIsOpen(false)}>

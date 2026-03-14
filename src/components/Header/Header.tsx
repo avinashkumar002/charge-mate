@@ -21,8 +21,8 @@ export default function Header() {
                 <nav>
                     {/* Desktop Header */}
                     <div className="hidden lg:flex items-center justify-between py-2">
-                        <Link href="/" className="flex items-center gap-2 relative w-41.5 h-12.5">
-                            <Image src={logo} alt="ChargeMate Logo" fill className="object-contain" sizes="100%" priority />
+                        <Link href="/" className="flex items-center gap-2 relative w-50 h-20">
+                            <Image src={logo} alt="EvSetu Logo" fill className="object-contain" sizes="100%" priority />
                         </Link>
 
                         <div className="flex gap-10">
@@ -59,7 +59,7 @@ export default function Header() {
                     {/* Mobile Header */}
                     <div className="flex lg:hidden items-center justify-between py-4">
                         <Link href="/" className="flex items-center gap-2 relative w-31.5 h-9.5">
-                            <Image src={logo} alt="ChargeMate Logo" fill className="object-contain" sizes="100%" priority />
+                            <Image src={logo} alt="EvSetu Logo" fill className="object-contain" sizes="100%" priority />
                         </Link>
 
                         <MobileMenuToggle logo={logo} navItems={NAV_ITEMS} />

@@ -13,8 +13,8 @@ export const ThankYouPage: FC = () => {
             {/* herosection */}
             <section className="relative bg-[url('/find-bg.svg')] md:bg-[url('/find-bg-desk.svg')]  bg-cover bg-center bg-no-repeat">
                 <Container>
-                    <div className="flex flex-col items-center pt-8 pb-8 md:pb-[70px] gap-4 md:gap-8 max-w-[620px] mx-auto ">
-                        <div className="relative w-15 h-15 md:w-[126px] md:h-[126px] ">
+                    <div className="flex flex-col items-center pt-8 pb-8 md:pb-17.5 gap-4 md:gap-8 max-w-155 mx-auto ">
+                        <div className="relative w-15 h-15 md:w-31.5 md:h-31.5 ">
                             <Image
                                 src="/ok.gif"
                                 alt="My GIF"
@@ -26,10 +26,10 @@ export const ThankYouPage: FC = () => {
 
                         <div className="flex flex-col gap-4">
                             <Typography variant="h1" weight={700} letterSpacing={0.01} className="text-black-900 text-center">
-                                <span className="text-blue-500"> You’re in.</span> Thanks for joining the ChargeMate waitlist.
+                                <span className="text-blue-500"> You’re in.</span> Thanks for joining the EvSetu waitlist.
                             </Typography>
                             <Typography variant="h4" weight={400} lineHeight={28} className="text-black-900 text-center">
-                                ChargeMate helps you find verified, private parking — fast, safe, and hassle-free.We’ll send early access details soon.
+                                EvSetu helps you find verified, private parking — fast, safe, and hassle-free.We’ll send early access details soon.
                             </Typography>
 
                         </div>
@@ -59,7 +59,7 @@ export const ThankYouPage: FC = () => {
                 </div>
                 <div className="flex xl:hidden">
                     <Container>
-                        <div className="flex relative w-full h-full min-h-[122px] ">
+                        <div className="flex relative w-full h-full min-h-30.5 ">
                             <Image
                                 src={parkedCar}
                                 alt="parkedCar"

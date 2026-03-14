@@ -1,0 +1,138 @@
+# Query: ChargeMate
+# ContextLines: 1
+
+37 results - 13 files
+
+package-lock.json:
+  1  {
+  2:   "name": "EvSetu-app",
+  3    "version": "0.1.0",
+
+  7      "": {
+  8:       "name": "EvSetu-app",
+  9        "version": "0.1.0",
+
+package.json:
+  1  {
+  2:   "name": "EvSetu-app",
+  3    "version": "0.1.0",
+
+public\sitemap.xml:
+   4    <url>
+   5:     <loc>https://EvSetu.com/</loc>
+   6      <lastmod>2025-12-17</lastmod>
+
+  11    <url>
+  12:     <loc>https://EvSetu.com/landing-page</loc>
+  13      <lastmod>2025-12-17</lastmod>
+
+  18    <url>
+  19:     <loc>https://EvSetu.com/thankyou</loc>
+  20      <lastmod>2025-12-17</lastmod>
+
+src\app\layout.tsx:
+  23    title: {
+  24:     default: "EvSetu - Find Smart, Secure Parking | Verified Spaces & Hosting",
+  25:     template: "%s | EvSetu",
+  26    },
+
+  41    ],
+  42:   authors: [{ name: "EvSetu Team" }],
+  43:   creator: "EvSetu",
+  44:   metadataBase: new URL("https://EvSetu.com"),
+  45    alternates: {
+  46:     canonical: "https://EvSetu.com/",
+  47    },
+
+  50      locale: "en_IN",
+  51:     siteName: "EvSetu",
+  52:     title: "EvSetu - Find Smart, Secure Charging",
+  53      description: "Connect with verified Charging owners. Stop circling. Save time and money.",
+
+  58          height: 630,
+  59:         alt: "EvSetu - Smart Charging Platform",
+  60        },
+
+  64      card: "summary_large_image",
+  65:     creator: "@EvSetu",
+  66:     title: "EvSetu - Find Smart, Secure Parking",
+  67      description: "Connect with verified parking spaces nearby.",
+
+src\app\page.tsx:
+  218                                  <Typography variant="body" weight={400} lineHeight={isMd ? 28 : 24} className="text-black-900 text-center">
+  219:                                     EvSetu connects <b> EV Drivers and Charger Hosts</b> with verified, private EV charging points nearby. No more range anxiety. Save time and power.
+  220                                  </Typography>
+
+src\app\(auth)\signup\page.tsx:
+  97                      <Typography variant="para" weight={400} className="text-black-700">
+  98:                         Join EvSetu and start {roleFromUrl === "host" ? "earning" : "charging"} today
+  99                      </Typography>
+
+src\app\(dashboard)\driver\charger\[id]\page.tsx:
+  20      return {
+  21:       title: "Charger Not Found | EvSetu",
+  22      };
+
+  25    return {
+  26:     title: `${charger.title} | EvSetu`,
+  27      description: `Book EV charging at ${charger.address}. ₹${charger.price_per_hour}/hour.`,
+
+src\app\thankyou\page.tsx:
+  28                              <Typography variant="h1" weight={700} letterSpacing={0.01} className="text-black-900 text-center">
+  29:                                 <span className="text-blue-500"> You’re in.</span> Thanks for joining the EvSetu waitlist.
+  30                              </Typography>
+  31                              <Typography variant="h4" weight={400} lineHeight={28} className="text-black-900 text-center">
+  32:                                 EvSetu helps you find verified, private parking — fast, safe, and hassle-free.We’ll send early access details soon.
+  33                              </Typography>
+
+src\components\Footer\Footer.tsx:
+  97                                  <Typography variant="para" weight={600} className="text-[#132457]">
+  98:                                     © 2026 EvSetu
+  99                                  </Typography>
+
+src\components\Header\Header.tsx:
+  24                          <Link href="/" className="flex items-center gap-2 relative w-50 h-20">
+  25:                             <Image src={logo} alt="EvSetu Logo" fill className="object-contain" sizes="100%" priority />
+  26                          </Link>
+
+  61                          <Link href="/" className="flex items-center gap-2 relative w-31.5 h-9.5">
+  62:                             <Image src={logo} alt="EvSetu Logo" fill className="object-contain" sizes="100%" priority />
+  63                          </Link>
+
+src\components\Header\MobileMenuToggle.tsx:
+  38            <Link href="/" className="flex items-center gap-2 relative w-31.5 h-9.5">
+  39:             <Image src={logo} alt="EvSetu Logo" fill className="object-contain" sizes="100%"  />
+  40            </Link>
+
+src\components\molecules\Faq\FaqList.tsx:
+  11      {
+  12:         question: "What is EvSetu?",
+  13          answer:
+  14:             "EvSetu is a smart, verified EV charging platform that connects EV drivers with private or public chargers nearby. It helps you find, book, or list chargers through an easy-to-use app."
+  15      },
+  16      {
+  17:         question: "How does EvSetu verify charging stations?",
+  18          answer:
+  19:             "Before a charging station goes live, EvSetu uses a thorough verification process.",
+  20          points: [
+
+  29          answer:
+  30:             "Yes. If you own a home or business EV charger, you can earn extra income by listing it on EvSetu. Upload photos, set your availability, and add your price — EvSetu handles the rest."
+  31      },
+
+  34          answer:
+  35:             "Listing a charger is free. EvSetu charges a small service fee on each booking to support payment processing, verification, and customer support."
+  36      },
+
+  44          answer:
+  45:             "Yes. All payments are processed through secure, PCI-compliant providers. Your financial information is fully encrypted and never stored on EvSetu servers."
+  46      },
+
+  49          answer:
+  50:             "If a driver arrives and the reserved charger is unavailable, EvSetu support will contact the host, help find a nearby alternative if possible, and provide a refund or credit if needed. Hosts who repeatedly violate guidelines may be removed."
+  51      },
+
+src\components\Typography\Typography.tsx:
+  27  
+  28:   /** Typography variant based on EvSetu design system */
+  29    variant?: TypographyVariant;
