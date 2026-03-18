@@ -53,7 +53,6 @@ export async function PUT(
 
     const { id } = await context.params;
 
-    // Verify ownership
     const existing = await prisma.charger.findUnique({
       where: { id },
       select: { host_id: true },
@@ -81,8 +80,6 @@ export async function PUT(
       available_end,
     } = validatedData;
 
-    const photo_url = body.photo_url || null;
-
     const charger = await prisma.charger.update({
       where: { id },
       data: {
@@ -94,7 +91,9 @@ export async function PUT(
         power_output,
         available_start,
         available_end,
-        photo_url,
+        photo_url: body.photo_url || null,
+        latitude: body.latitude ?? undefined,
+        longitude: body.longitude ?? undefined,
       },
     });
 

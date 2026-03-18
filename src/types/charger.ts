@@ -8,6 +8,8 @@ export interface Charger {
   charger_type: string;
   power_output: number;
   photo_url: string | null;
+  latitude: number | null;
+  longitude: number | null;
   available_start: string;
   available_end: string;
   status: string;

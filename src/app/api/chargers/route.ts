@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
       photo_url,
     } = validatedData;
 
-    // Use authenticated user's ID as host_id
     const charger = await prisma.charger.create({
       data: {
         host_id: authUser.id,
@@ -38,6 +37,8 @@ export async function POST(request: NextRequest) {
         available_start,
         available_end,
         photo_url: photo_url || null,
+        latitude: body.latitude || null,
+        longitude: body.longitude || null,
         status: "active",
       },
     });

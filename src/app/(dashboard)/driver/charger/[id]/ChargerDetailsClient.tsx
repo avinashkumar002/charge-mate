@@ -7,6 +7,7 @@ import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
 import { CHARGER_TYPES, POWER_OUTPUTS } from "@/schemas/chargerSchema";
 import type { Charger } from "@/types/charger";
+import LocationMap from "@/components/LocationMap/LocationMap";
 
 interface ChargerDetailsClientProps {
   charger: Charger;
@@ -130,22 +131,43 @@ export default function ChargerDetailsClient({ charger }: ChargerDetailsClientPr
             </div>
 
             {/* Location */}
-            <div className="border-t border-[#E5E5E5] pt-6">
-              <Typography variant="h4" weight={600} className="text-black-900 mb-3">
-                Location
-              </Typography>
-              <div className="flex items-start gap-3">
-                <span className="text-xl">📍</span>
-                <div>
-                  <Typography variant="para" className="text-black-800">
-                    {charger.address}
-                  </Typography>
-                  <Typography variant="chip" className="text-black-500 mt-1">
-                    Pincode: {charger.pincode}
-                  </Typography>
-                </div>
-              </div>
-            </div>
+<div className="border-t border-[#E5E5E5] pt-6">
+  <Typography variant="h4" weight={600} className="text-black-900 mb-3">
+    Location
+  </Typography>
+
+  {charger.latitude && charger.longitude && (
+    <div className="mb-3">
+      <LocationMap
+        latitude={charger.latitude}
+        longitude={charger.longitude}
+        title={charger.title}
+      />
+    </div>
+  )}
+
+  <div className="flex items-start gap-3">
+    <span className="text-xl">📍</span>
+    <div className="flex-1">
+      <Typography variant="para" className="text-black-800">
+        {charger.address}
+      </Typography>
+      <Typography variant="chip" className="text-black-500 mt-1">
+        Pincode: {charger.pincode}
+      </Typography>
+    </div>
+    {charger.latitude && charger.longitude && (
+      <a
+        href={`https://www.google.com/maps/dir/?api=1&destination=${charger.latitude},${charger.longitude}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="shrink-0 px-3 py-2 bg-[#ECF5FF] text-[#2C7FFF] text-sm font-medium rounded-lg hover:bg-[#d9e8ff] transition-colors"
+      >
+        Get Directions ↗
+      </a>
+    )}
+  </div>
+</div>
           </div>
         </div>
 

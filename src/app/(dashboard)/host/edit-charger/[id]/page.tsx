@@ -19,6 +19,7 @@ import {
   TIME_SLOTS,
 } from "@/schemas/chargerSchema";
 import { authFetch } from "@/lib/auth/authFetch";
+import LocationPicker from "@/components/LocationPicker/LocationPicker";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -31,11 +32,14 @@ export default function EditChargerPage({ params }: PageProps) {
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ChargerFormValues>({
     resolver: zodResolver(chargerSchema),
@@ -58,9 +62,12 @@ export default function EditChargerPage({ params }: PageProps) {
             power_output: charger.power_output,
             available_start: charger.available_start,
             available_end: charger.available_end,
+
           });
           // Set photo URL
           setPhotoUrl(charger.photo_url || "");
+          setLatitude(charger.latitude || null);
+          setLongitude(charger.longitude || null);
         } else {
           setError("Charger not found");
         }
@@ -85,6 +92,8 @@ export default function EditChargerPage({ params }: PageProps) {
         body: JSON.stringify({
           ...data,
           photo_url: photoUrl,
+          latitude,
+          longitude,
         }),
       });
 
@@ -164,7 +173,20 @@ export default function EditChargerPage({ params }: PageProps) {
                 {/* Image Upload */}
                 <ImageUpload
                   value={photoUrl}
-                  onChange={setPhotoUrl}
+                  onChange={(url) => {
+                    setPhotoUrl(url);
+                    setValue("photo_url", url);
+                  }}
+                  error={errors.photo_url?.message}
+                />
+                {/* Location Picker */}
+                <LocationPicker
+                  latitude={latitude}
+                  longitude={longitude}
+                  onLocationChange={(lat, lng) => {
+                    setLatitude(lat);
+                    setLongitude(lng);
+                  }}
                 />
 
                 {/* Title */}

@@ -26,9 +26,9 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
       return;
     }
 
-    // Validate file size (max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      setUploadError("Image must be less than 2MB");
+    // Validate file size (max 4MB)
+    if (file.size > 4 * 1024 * 1024) {
+      setUploadError("Image must be less than 4MB");
       return;
     }
 
@@ -126,7 +126,7 @@ export default function ImageUpload({ value, onChange, error }: ImageUploadProps
                 Click to upload charger photo
               </Typography>
               <Typography variant="chip" className="text-black-400">
-                JPG, PNG, WebP (max 2MB)
+                JPG, PNG, WebP (max 4MB)
               </Typography>
             </div>
           )}

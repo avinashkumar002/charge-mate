@@ -471,52 +471,7 @@ const WaitlistPage: FC = () => {
                 </Container>
             </section>
 
-            {/* FAQ */}
-            <section id="faq-view" className="scroll-mt-10">
-                <Container>
-                    <div className="flex flex-col gap-8 md:gap-12.5 items-center py-8 md:py-17.5 ">
-                        <div className="flex flex-col gap-1 md:gap-2 items-center">
-                            <Typography variant="h2" weight={600} lineHeight={isMd ? 45 : 36} className="text-black-900">
-                                Frequently Asked Questions
-                            </Typography>
-                            <Typography variant="body" lineHeight={isMd ? 32 : 22} letterSpacing={0.01} weight={400} className="text-black-700 text-center">
-                                Have questions about EV charging? Contact our support team via email — we’ll respond quickly.
-                            </Typography>
-                        </div>
-
-                        <div className="flex gap-5 xl:gap-22.5 items-start h-full w-full ">
-                            <div className="hidden md:flex flex-col gap-6 w-[80%] sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
-                                <FaqCar />
-                                <div className="">
-                                    <Button
-                                        text={showAll ? "View Less" : "View More Questions"}
-                                        variant="lg"
-                                        bg="#365314"
-                                        color="#FFFFFF"
-                                        hoverBg="#101010"
-                                        boxShadow="1px 2px 24px 0px #13245733"
-                                        onClick={handleToggleFaqs}
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-6 max-w-141 ">
-                                <FaqList showCount={showAll ? undefined : initialCount} />
-                                <div className="flex justify-center md:hidden">
-                                    <Button
-                                        text={showAll ? "View Less" : "View More Questions"}
-                                        variant="lg"
-                                        bg="#365314"
-                                        color="#FFFFFF"
-                                        hoverBg="#101010"
-                                        boxShadow="1px 2px 24px 0px #13245733"
-                                        onClick={handleToggleFaqs}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Container>
-            </section>
+            
 
             {/* Key Features */}
             <section id="features-view" className="bg-[#ecfccb] scroll-mt-10">
@@ -705,6 +660,52 @@ const WaitlistPage: FC = () => {
                         </div>
                     </Container>
                 </div>
+            </section>
+            {/* FAQ */}
+            <section id="faq-view" className="scroll-mt-10">
+                <Container>
+                    <div className="flex flex-col gap-8 md:gap-12.5 items-center py-8 md:py-17.5 ">
+                        <div className="flex flex-col gap-1 md:gap-2 items-center">
+                            <Typography variant="h2" weight={600} lineHeight={isMd ? 45 : 36} className="text-black-900">
+                                Frequently Asked Questions
+                            </Typography>
+                            <Typography variant="body" lineHeight={isMd ? 32 : 22} letterSpacing={0.01} weight={400} className="text-black-700 text-center">
+                                Have questions about EV charging? Contact our support team via email — we’ll respond quickly.
+                            </Typography>
+                        </div>
+
+                        <div className="flex gap-5 xl:gap-22.5 items-start h-full w-full ">
+                            <div className="hidden md:flex flex-col gap-6 w-[80%] sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
+                                <FaqCar />
+                                <div className="">
+                                    <Button
+                                        text={showAll ? "View Less" : "View More Questions"}
+                                        variant="lg"
+                                        bg="#365314"
+                                        color="#FFFFFF"
+                                        hoverBg="#101010"
+                                        boxShadow="1px 2px 24px 0px #13245733"
+                                        onClick={handleToggleFaqs}
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-6 max-w-141 ">
+                                <FaqList showCount={showAll ? undefined : initialCount} />
+                                <div className="flex justify-center md:hidden">
+                                    <Button
+                                        text={showAll ? "View Less" : "View More Questions"}
+                                        variant="lg"
+                                        bg="#365314"
+                                        color="#FFFFFF"
+                                        hoverBg="#101010"
+                                        boxShadow="1px 2px 24px 0px #13245733"
+                                        onClick={handleToggleFaqs}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Container>
             </section>
         </>
     )

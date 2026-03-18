@@ -60,7 +60,7 @@ export const chargerSchema = z.object({
 
     available_end: z.string().min(1, "Select end time"),
 
-    photo_url: z.string().optional(),
+    photo_url: z.string().min(1, "Please upload a charger photo"),
 }).refine(
     (data) => {
         const startIndex = TIME_SLOTS.indexOf(data.available_start as typeof TIME_SLOTS[number]);

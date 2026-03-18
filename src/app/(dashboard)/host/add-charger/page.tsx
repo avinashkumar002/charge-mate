@@ -20,6 +20,7 @@ import {
   TIME_SLOTS,
 } from "@/schemas/chargerSchema";
 import { authFetch } from "@/lib/auth/authFetch";
+import LocationPicker from "@/components/LocationPicker/LocationPicker";
 
 export default function AddChargerPage() {
   const router = useRouter();
@@ -27,12 +28,15 @@ export default function AddChargerPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-  } = useForm<ChargerFormValues>({
+} = useForm<ChargerFormValues>({
     resolver: zodResolver(chargerSchema),
     defaultValues: {
       title: "",
@@ -58,6 +62,8 @@ export default function AddChargerPage() {
           ...data,
           host_id: user?.id,
           photo_url: photoUrl,
+          latitude,
+          longitude,
         }),
       });
 
@@ -128,8 +134,20 @@ export default function AddChargerPage() {
               <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
                 {/* Image Upload */}
                 <ImageUpload
-                  value={photoUrl}
-                  onChange={setPhotoUrl}
+  value={photoUrl}
+  onChange={(url) => {
+    setPhotoUrl(url);
+    setValue("photo_url", url);
+  }}
+  error={errors.photo_url?.message}
+/>
+                <LocationPicker
+                  latitude={latitude}
+                  longitude={longitude}
+                  onLocationChange={(lat, lng) => {
+                    setLatitude(lat);
+                    setLongitude(lng);
+                  }}
                 />
 
                 {/* Title */}

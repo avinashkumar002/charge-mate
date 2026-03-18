@@ -29,8 +29,10 @@ model Charger {
   charger_type    String
   power_output    Float
   photo_url       String?
-  available_start String   // "09:00"
-  available_end   String   // "21:00"
+  latitude        Float?
+  longitude       Float?
+  available_start String
+  available_end   String
   status          String   @default("active")
   created_at      DateTime @default(now())
   
