@@ -8,6 +8,8 @@ import ChargerListItem from "@/components/ChargerListItem/ChargerListItem";
 import { ChargerCardSkeleton } from "@/components/Skeleton/Skeleton";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useSearchChargersQuery } from "@/store/services/chargerApi";
+import { useDriverLocation } from "@/hooks/useDriverLocation";
+import { calculateDistance } from "@/lib/distance";
 
 const INITIAL_FILTERS = {
   pincode: "",
@@ -19,11 +21,10 @@ const INITIAL_FILTERS = {
 
 export default function SearchChargersPage() {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
-  
-  // Debounce filters to avoid too many API calls
+  const { location } = useDriverLocation();
+
   const debouncedFilters = useDebounce(filters, 500);
 
-  // Build search params from debounced filters
   const searchParams = useMemo(() => ({
     ...(debouncedFilters.pincode && { pincode: debouncedFilters.pincode }),
     ...(debouncedFilters.charger_type && { charger_type: debouncedFilters.charger_type }),
@@ -32,10 +33,38 @@ export default function SearchChargersPage() {
     ...(debouncedFilters.min_power && { min_power: parseFloat(debouncedFilters.min_power) }),
   }), [debouncedFilters]);
 
-  // RTK Query - cached & optimized
   const { data: chargers, isLoading, isError, refetch } = useSearchChargersQuery(searchParams);
 
-  // Memoized callbacks to prevent child re-renders
+  // Calculate distances and sort by nearest
+  const chargersWithDistance = useMemo(() => {
+    if (!chargers) return [];
+
+    return chargers
+      .map((charger) => {
+        let distance: number | null = null;
+
+        if (location && charger.latitude && charger.longitude) {
+          distance = calculateDistance(
+            location.latitude,
+            location.longitude,
+            charger.latitude,
+            charger.longitude
+          );
+        }
+
+        return { charger, distance };
+      })
+      .sort((a, b) => {
+        // Chargers with distance first, sorted nearest
+        if (a.distance !== null && b.distance !== null) {
+          return a.distance - b.distance;
+        }
+        if (a.distance !== null) return -1;
+        if (b.distance !== null) return 1;
+        return 0;
+      });
+  }, [chargers, location]);
+
   const handleFilterChange = useCallback((key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   }, []);
@@ -55,7 +84,9 @@ export default function SearchChargersPage() {
                 Find Chargers
               </Typography>
               <Typography variant="para" className="text-black-600 mt-1">
-                Search for available EV chargers near you
+                {location
+                  ? "Showing chargers sorted by nearest to you"
+                  : "Enable location to see distances"}
               </Typography>
             </div>
 
@@ -70,14 +101,12 @@ export default function SearchChargersPage() {
 
             {/* Results */}
             <div className="flex flex-col gap-4">
-              {/* Results count */}
               {!isLoading && chargers && (
                 <Typography variant="para" className="text-black-600">
                   {chargers.length} charger{chargers.length !== 1 ? "s" : ""} found
                 </Typography>
               )}
 
-              {/* Loading state */}
               {isLoading && (
                 <div className="flex flex-col gap-4">
                   {[1, 2, 3].map((i) => (
@@ -86,7 +115,6 @@ export default function SearchChargersPage() {
                 </div>
               )}
 
-              {/* Error state */}
               {isError && (
                 <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
                   <Typography variant="h4" className="text-red-600 mb-2">
@@ -101,8 +129,7 @@ export default function SearchChargersPage() {
                 </div>
               )}
 
-              {/* Empty state */}
-              {!isLoading && !isError && chargers?.length === 0 && (
+              {!isLoading && !isError && chargersWithDistance.length === 0 && (
                 <div className="bg-white border border-[#E5E5E5] rounded-xl p-12 text-center">
                   <div className="text-6xl mb-4">🔍</div>
                   <Typography variant="h4" weight={600} className="text-black-900 mb-2">
@@ -114,11 +141,14 @@ export default function SearchChargersPage() {
                 </div>
               )}
 
-              {/* Charger list */}
-              {!isLoading && !isError && chargers && chargers.length > 0 && (
+              {!isLoading && !isError && chargersWithDistance.length > 0 && (
                 <div className="flex flex-col gap-4">
-                  {chargers.map((charger) => (
-                    <ChargerListItem key={charger.id} charger={charger} />
+                  {chargersWithDistance.map(({ charger, distance }) => (
+                    <ChargerListItem
+                      key={charger.id}
+                      charger={charger}
+                      distance={distance}
+                    />
                   ))}
                 </div>
               )}

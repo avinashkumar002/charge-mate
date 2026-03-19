@@ -5,13 +5,15 @@ import Link from "next/link";
 import Typography from "@/components/Typography/Typography";
 import Button from "@/components/Button/Button";
 import { CHARGER_TYPES, POWER_OUTPUTS } from "@/schemas/chargerSchema";
+import { formatDistance } from "@/lib/distance";
 import type { Charger } from "@/types/charger";
 
 interface ChargerListItemProps {
   charger: Charger;
+  distance?: number | null;
 }
 
-function ChargerListItem({ charger }: ChargerListItemProps) {
+function ChargerListItem({ charger, distance }: ChargerListItemProps) {
   const chargerTypeLabel =
     CHARGER_TYPES.find((t) => t.value === charger.charger_type)?.label ||
     charger.charger_type;
@@ -80,6 +82,11 @@ function ChargerListItem({ charger }: ChargerListItemProps) {
             <span className="px-3 py-1 bg-[#F9F9F9] text-black-600 text-xs font-medium rounded-full">
               📍 {charger.pincode}
             </span>
+            {distance !== null && distance !== undefined && (
+              <span className="px-3 py-1 bg-[#FFF7ED] text-[#C2410C] text-xs font-medium rounded-full">
+                📏 {formatDistance(distance)}
+              </span>
+            )}
           </div>
 
           {/* Action */}
@@ -100,5 +107,4 @@ function ChargerListItem({ charger }: ChargerListItemProps) {
   );
 }
 
-// Memoize to prevent unnecessary re-renders
 export default memo(ChargerListItem);
