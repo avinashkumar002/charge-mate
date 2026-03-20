@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import logo from "./header-img/header-logo.png";
-import world from "./header-img/world.svg";
 import Container from "@/components/Container/Container";
 import Typography from "@/components/Typography/Typography";
 import ScrollNavLink from "../ScrollNavLink/ScrollNavLink";
@@ -37,22 +36,9 @@ export default function Header() {
                                 ))}
                             </div>
 
-                            <div className="flex gap-3 items-center">
-                                {/* Language Selector */}
-                                <div className="px-4.75 py-2.25 border border-[#727272] rounded-lg">
-                                    <div className="flex gap-2 items-center">
-                                        <div className="relative w-4 h-4">
-                                            <Image src={world} alt="language" fill className="object-contain" sizes="100%"  />
-                                        </div>
-                                        <Typography variant="para" weight={500} className="text-black-700">
-                                            EN
-                                        </Typography>
-                                    </div>
-                                </div>
+                            {/* Auth Buttons */}
+                            <AuthButtons />
 
-                                {/* Auth Buttons */}
-                                <AuthButtons />
-                            </div>
                         </div>
                     </div>
 

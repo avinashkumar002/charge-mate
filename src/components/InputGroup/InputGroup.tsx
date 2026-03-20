@@ -9,21 +9,31 @@ interface InputGroupProps {
   error?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: any;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputGroup: React.FC<InputGroupProps> = ({ placeholder = "Your name", type = "text", Icon, error,
-  register, }) => {
-  const [value, setValue] = useState("");
+const InputGroup: React.FC<InputGroupProps> = ({
+  placeholder = "Your name",
+  type = "text",
+  Icon,
+  error,
+  register,
+  value: controlledValue,
+  onChange,
+}) => {
+  const [internalValue, setInternalValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  const strokeColor = isFocused || value ? "#365314" : "#727272";
+  const displayValue = controlledValue !== undefined ? controlledValue : internalValue;
+  const strokeColor = isFocused || displayValue ? "#365314" : "#727272";
 
   return (
     <div className="flex flex-col gap-1">
-      {/* Wrapper */}
       <div
-        className={`py-3.75 px-4.5 md:p-4.5 border-[1.5px] rounded-xl flex gap-2.5 items-center ${error ? "border-red-500" : "border-[#365314]"
-          }`}
+        className={`py-3.75 px-4.5 md:p-4.5 border-[1.5px] rounded-xl flex gap-2.5 items-center ${
+          error ? "border-red-500" : "border-[#365314]"
+        }`}
       >
         {Icon && (
           <div className="min-w-5">
@@ -33,9 +43,17 @@ const InputGroup: React.FC<InputGroupProps> = ({ placeholder = "Your name", type
         <input
           type={type}
           placeholder={placeholder}
-          {...register} // RHF registration
+          {...(register || {})}
+          {...(controlledValue !== undefined
+            ? { value: controlledValue, onChange }
+            : {})}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          onChange={(e) => {
+            if (onChange) onChange(e);
+            else if (!register) setInternalValue(e.target.value);
+            if (register?.onChange) register.onChange(e);
+          }}
           className="placeholder:text-[#727272] placeholder:text-[16px] [@media(max-width:390px)]:placeholder:text-[12px] outline-none text-lime-900 flex-1"
         />
       </div>

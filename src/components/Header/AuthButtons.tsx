@@ -20,6 +20,13 @@ export default function AuthButtons() {
   if (isAuthenticated && user) {
     return (
       <div className="flex gap-3 items-center">
+        <Link href="/profile">
+          <div className="w-9 h-9 bg-[#d9f99d] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#bef264] transition-colors">
+            <span className="text-sm font-bold text-[#365314]">
+              {user.name?.charAt(0).toUpperCase()}
+            </span>
+          </div>
+        </Link>
         <Link href={user.role === "driver" ? "/driver" : "/host"}>
           <Button
             text="Dashboard"
