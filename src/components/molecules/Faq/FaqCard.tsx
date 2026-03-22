@@ -15,7 +15,7 @@ export default function FaqCard({ question, answer, points, isActive, onToggle }
     return (
         <div
             className={`single-faq flex flex-col transition-all duration-300
-                border-[1.2px] py-[18px] px-5 md:p-6 rounded-2xl w-full cursor-pointer
+                border-[1.2px] py-4.5 px-5 md:p-6 rounded-2xl w-full cursor-pointer
                 ${isActive ? "border-[#365314]" : "border-[#D0D0D0]"}
             `}
             onClick={onToggle}
@@ -43,13 +43,13 @@ export default function FaqCard({ question, answer, points, isActive, onToggle }
             {/* Answer */}
             <div
                 className={`answer overflow-hidden transition-all duration-300 
-                    ${isActive ? "mt-3 max-h-[500px] opacity-100" : "max-h-0 opacity-0"}
+                    ${isActive ? "mt-3 max-h-125 opacity-100" : "max-h-0 opacity-0"}
                 `}
             >
                 <Typography
                     variant="para"
                     weight={400}
-                    className="text-black-500 leading-[22px]! md:leading-[26px]!"
+                    className="text-black-500 leading-5.5! md:leading-6.5!"
                 >
                     {answer}
                 </Typography>
@@ -60,7 +60,7 @@ export default function FaqCard({ question, answer, points, isActive, onToggle }
                         {points.map((item, idx) => (
                             <li
                                 key={idx}
-                                className="text-sm md:text-base leading-[22px] md:leading-[26px]"
+                                className="text-sm md:text-base leading-5.5 md:leading-6.5"
                             >
                                 {item}
                             </li>

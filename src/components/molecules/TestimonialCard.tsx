@@ -23,7 +23,7 @@ export default function TestimonialCard({
   const isMd = useMediaQuery('(min-width: 768px)');
 
   return (
-    <div className="py-6 md:py-[30px] px-5 md:px-6 flex flex-col gap-4 md:gap-5 rounded-2xl bg-white max-w-[364px] md:min-h-80 shadow-[0px_2px_16px_0px_#1B62F51F]">
+    <div className="py-6 md:py-7.5 px-5 md:px-6 flex flex-col gap-4 md:gap-5 rounded-2xl bg-white max-w-91 md:min-h-80 shadow-[0px_2px_16px_0px_#1B62F51F]">
       
       {/* Top Row */}
       <div className="flex justify-between">
@@ -40,7 +40,7 @@ export default function TestimonialCard({
 
       {/* Main Text */}
       <div className="flex flex-col gap-2">
-        <h4 className="font-medium text-[18px] leading-7 md:text-[20px] md:leading-[30px] tracking-0 text-black-900">
+        <h4 className="font-medium text-[18px] leading-7 md:text-[20px] md:leading-7.5 tracking-0 text-black-900">
           {title}
         </h4>
 

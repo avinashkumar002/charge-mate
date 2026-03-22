@@ -55,6 +55,11 @@ const Footer: FC = () => {
                                             target="features-view"
                                             typographyClassName="text-[#2B2B2B] cursor-pointer"
                                         />
+                                        <ScrollNavLink
+                                            label="FAQ"
+                                            target="faq-view"
+                                            typographyClassName="text-[#2B2B2B] cursor-pointer"
+                                        />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-5">
@@ -64,22 +69,22 @@ const Footer: FC = () => {
                                         </Typography>
                                     </div>
                                     <div className="flex flex-col gap-3">
-                                        <Link href="">
+                                        <Link href="/help-center">
                                             <Typography variant="para" weight={500} className="text-[#2B2B2B] cursor-pointer">
                                                 Help Center
                                             </Typography>
                                         </Link>
-                                        <Link href="">
+                                        <Link href="/safety">
                                             <Typography variant="para" weight={500} className="text-[#2B2B2B] cursor-pointer">
                                                 Safety Issues
                                             </Typography>
                                         </Link>
-                                        <Link href="">
+                                        <Link href="/cancellation-policy">
                                             <Typography variant="para" weight={500} className="text-[#2B2B2B] cursor-pointer">
                                                 Cancellation Option
                                             </Typography>
                                         </Link>
-                                        <Link href="">
+                                        <Link href="/report-concern">
                                             <Typography variant="para" weight={500} className="text-[#2B2B2B] cursor-pointer">
                                                 Report Concern
                                             </Typography>

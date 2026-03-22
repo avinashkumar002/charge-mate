@@ -27,16 +27,6 @@ export default function AuthButtons() {
             </span>
           </div>
         </Link>
-        <Link href={user.role === "driver" ? "/driver" : "/host"}>
-          <Button
-            text="Dashboard"
-            bg="#FFFFFF"
-            color="#365314"
-            hoverBg="#F9F9F9"
-            variant="sm"
-            boxShadow="inset 0 0 0 1px #365314"
-          />
-        </Link>
         <Button
           text="Logout"
           bg="#365314"
@@ -49,27 +39,6 @@ export default function AuthButtons() {
     );
   }
 
-  return (
-    <div className="flex gap-3 items-center">
-      <Link href="/login">
-        <Button
-          text="Login"
-          bg="#FFFFFF"
-          color="#365314"
-          hoverBg="#F9F9F9"
-          variant="sm"
-          boxShadow="inset 0 0 0 1px #365314"
-        />
-      </Link>
-      <Link href="/signup">
-        <Button
-          text="Sign Up"
-          bg="#d9f99d"
-          color="#101010"
-          hoverBg="#bef264"
-          variant="sm"
-        />
-      </Link>
-    </div>
-  );
+  // Not logged in — no buttons (landing page is the auth entry point)
+  return null;
 }

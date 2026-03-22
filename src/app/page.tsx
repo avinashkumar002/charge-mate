@@ -1,4 +1,7 @@
 "use client";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Container from "@/components/Container/Container";
 import Typography from "@/components/Typography/Typography";
 import { FC, useState, Suspense } from "react";
@@ -200,6 +203,14 @@ const WaitlistPage: FC = () => {
         setShowAll(prev => !prev);
     };
 
+    const { isAuthenticated, user, loading } = useAuth();
+    const router = useRouter();
+    useEffect(() => {
+        if (!loading && isAuthenticated && user) {
+            router.push(user.role === "host" ? "/host" : "/driver");
+        }
+    }, [loading, isAuthenticated, user, router]);
+
     return (
         <>
             <Suspense fallback={null}>
@@ -285,8 +296,13 @@ const WaitlistPage: FC = () => {
                                     />
                                 </Link>
                             </div>
-
                         </div>
+                        <Typography variant="para" className="text-black-600 text-center">
+                                Already have an account?{" "}
+                                <Link href="/login" className="text-[#2C7FFF] hover:underline font-semibold">
+                                    Login here
+                                </Link>
+                            </Typography>
                     </div>
                 </Container>
             </section>
