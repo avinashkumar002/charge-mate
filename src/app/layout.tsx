@@ -6,6 +6,8 @@ import Footer from "@/components/Footer/Footer";
 import { Toaster } from "react-hot-toast";
 import StoreProvider from "@/store/StoreProvider";
 import RealtimeProvider from "@/components/RealtimeProvider/RealtimeProvider";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -121,6 +123,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </RealtimeProvider>
         </StoreProvider>
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );

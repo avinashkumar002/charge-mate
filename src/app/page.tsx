@@ -14,7 +14,7 @@ import Button from "@/components/Button/Button";
 import glass from "@/assets/svgs/glass.svg"
 import book from "@/assets/svgs/book.svg"
 import paid from "@/assets/svgs/paid.svg"
-import car from "@/assets/svgs/feature-car.svg"
+import car from "@/assets/images/feature-car.png"
 import realtime from "@/assets/svgs/real-time.svg"
 import tick from "@/assets/svgs/tick.svg"
 import verified from "@/assets/svgs/verifid.svg"
@@ -657,7 +657,7 @@ const WaitlistPage: FC = () => {
 
 
             {/* car design */}
-            <section className="overflow-hidden ">
+            {/* <section className="overflow-hidden ">
                 <div className="hidden xl:flex">
                     <Container>
                         <AnimatedCarSection />
@@ -676,7 +676,7 @@ const WaitlistPage: FC = () => {
                         </div>
                     </Container>
                 </div>
-            </section>
+            </section> */}
             {/* FAQ */}
             <section id="faq-view" className="scroll-mt-10">
                 <Container>
