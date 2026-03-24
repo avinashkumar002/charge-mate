@@ -25,7 +25,7 @@ const Footer: FC = () => {
                                         fill
                                         className="object-contain"
                                         sizes="100%"
-                                         
+
                                     />
                                 </div>
                                 <div className="flex flex-col">
@@ -44,22 +44,28 @@ const Footer: FC = () => {
                                             Company
                                         </Typography>
                                     </div>
+
                                     <div className="flex flex-col gap-3">
-                                        <ScrollNavLink
-                                            label="How it Works"
-                                            target="how-it-works"
-                                            typographyClassName="text-[#2B2B2B] cursor-pointer"
-                                        />
-                                        <ScrollNavLink
-                                            label="Features"
-                                            target="features-view"
-                                            typographyClassName="text-[#2B2B2B] cursor-pointer"
-                                        />
-                                        <ScrollNavLink
-                                            label="FAQ"
-                                            target="faq-view"
-                                            typographyClassName="text-[#2B2B2B] cursor-pointer"
-                                        />
+                                        <Link href="/how-it-works">
+                                            <Typography variant="para" weight={500} className="text-[#2B2B2B] cursor-pointer">
+                                                How it Works
+                                            </Typography>
+                                        </Link>
+                                        <Link href="/features">
+                                            <Typography variant="para" weight={500} className="text-[#2B2B2B] cursor-pointer">
+                                                Features
+                                            </Typography>
+                                        </Link>
+                                        <Link href="/faq">
+                                            <Typography variant="para" weight={500} className="text-[#2B2B2B] cursor-pointer">
+                                                FAQ
+                                            </Typography>
+                                        </Link>
+                                        <Link href="/report-concern">
+                                            <Typography variant="para" weight={500} className="text-[#2B2B2B] cursor-pointer">
+                                                Report Concern
+                                            </Typography>
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-5">
@@ -124,7 +130,7 @@ const Footer: FC = () => {
                                             fill
                                             className="object-contain"
                                             sizes="100%"
-                                             
+
                                         />
                                     </div>
                                     <Typography variant="body" weight={500} className="text-[#2B2B2B]">
@@ -141,7 +147,7 @@ const Footer: FC = () => {
                                                 fill
                                                 className="object-contain"
                                                 sizes="100%"
-                                                 
+
                                             />
                                         </div>
                                     </Link>
@@ -154,7 +160,7 @@ const Footer: FC = () => {
                                                 fill
                                                 className="object-contain"
                                                 sizes="100%"
-                                                 
+
                                             />
                                         </div>
                                     </Link>
@@ -167,7 +173,7 @@ const Footer: FC = () => {
                                                 fill
                                                 className="object-contain"
                                                 sizes="100%"
-                                                 
+
                                             />
                                         </div>
                                     </Link>
