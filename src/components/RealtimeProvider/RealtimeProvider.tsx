@@ -23,11 +23,11 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
     const setRealtimeAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.access_token) {
-        // console.log("[RT] 🔐 Setting auth for user:", user.id, "role:", user.role);
+        console.log("[RT] 🔐 Setting auth for user:", user.id, "role:", user.role);
         supabase.realtime.setAuth(session.access_token);
         setIsRealtimeReady(true);
       } else {
-        // console.warn("[RT] ⚠️ No session token");
+        console.warn("[RT] ⚠️ No session token");
       }
     };
 
@@ -36,7 +36,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         if (session?.access_token) {
-          // console.log("[RT] 🔄 Auth refreshed");
+          console.log("[RT] 🔄 Auth refreshed");
           supabase.realtime.setAuth(session.access_token);
           setIsRealtimeReady(true);
         } else {
@@ -60,7 +60,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
         if (Array.isArray(data)) {
           const ids = data.map((c: any) => c.id);
           setHostChargerIds(ids);
-          // console.log("[RT] 📋 Host charger IDs loaded:", ids);
+          console.log("[RT] 📋 Host charger IDs loaded:", ids);
         }
       })
       .catch((err) => console.error("[RT] Failed to fetch charger IDs:", err));
@@ -70,7 +70,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
   useEffect(() => {
     if (!user?.id || user?.role !== "driver" || !isRealtimeReady) return;
 
-    // console.log("[RT] 👤 Driver subscribing to channel...");
+    console.log("[RT] 👤 Driver subscribing to channel...");
 
     const channel = supabase
       .channel(`driver-bookings-${user.id}`)
@@ -83,7 +83,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
           filter: `driver_id=eq.${user.id}`,
         },
         (payload: any) => {
-          // console.log("[RT] 📨 Driver received UPDATE:", payload);
+          console.log("[RT] 📨 Driver received UPDATE:", payload);
 
           const bookingId = payload.new?.id;
           const newStatus = payload.new?.status;
@@ -96,7 +96,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
           );
 
           if (isSelfMutated(bookingId)) {
-            // console.log("[RT] ⏭️ Skipping self-mutation");
+            console.log("[RT] ⏭️ Skipping self-mutation");
             return;
           }
 
@@ -108,95 +108,100 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
         }
       )
       .subscribe((status) => {
-        // console.log("[RT] Driver channel status:", status);
+        console.log("[RT] Driver channel status:", status);
       });
 
     return () => {
-      // console.log("[RT] 🔌 Driver unsubscribing");
+      console.log("[RT] 🔌 Driver unsubscribing");
       supabase.removeChannel(channel);
     };
   }, [user?.id, user?.role, isRealtimeReady, dispatch]);
 
-  // Host: listen for new bookings and cancellations
-  useEffect(() => {
-    if (!user?.id || user?.role !== "host" || hostChargerIds.length === 0 || !isRealtimeReady) {
-      // console.log("[RT] 🏠 Host channel waiting... ready:", isRealtimeReady, "chargers:", hostChargerIds.length);
-      return;
-    }
+// Host: listen for new bookings and cancellations
+useEffect(() => {
+  if (!user?.id || user?.role !== "host" || !isRealtimeReady) {
+    console.log("[RT] 🏠 Host channel waiting... ready:", isRealtimeReady, "user:", !!user?.id);
+    return;
+  }
 
-    // console.log("[RT] 🏠 Host subscribing to channel for chargers:", hostChargerIds);
+  if (hostChargerIds.length === 0) {
+    console.log("[RT] 🏠 Host channel waiting... no chargers yet");
+    return;
+  }
 
-    const channel = supabase
-      .channel(`host-bookings-${user.id}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "Booking",
-        },
-        (payload: any) => {
-          // console.log("[RT] 📨 Host received INSERT - FULL PAYLOAD:", JSON.stringify(payload, null, 2));
-          // console.log("[RT] 🔍 payload.new:", payload.new);
-          // console.log("[RT] 🔍 Charger ID:", payload.new?.charger_id);
-          // console.log("[RT] 🔍 All keys in payload.new:", Object.keys(payload.new || {}));
-          // console.log("[RT] 🔍 My chargers:", hostChargerIds);
+  console.log("[RT] 🏠 Host subscribing to channel for chargers:", hostChargerIds);
 
-          if (hostChargerIds.includes(payload.new?.charger_id)) {
-            // console.log("[RT] ✅ Match! Showing toast");
-            dispatch(
-              bookingApi.util.invalidateTags([
-                { type: "HostBookingList", id: "HOST" },
-              ])
-            );
-            toast.success("New booking request received! ⚡");
-          } else {
-            console.log("[RT] ⏭️ Skipping - not our charger");
-          }
-        }
-      )
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "Booking",
-        },
-        (payload: any) => {
-          // console.log("[RT] 📨 Host received UPDATE:", payload);
+  const channel = supabase
+    .channel(`host-bookings-${user.id}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "Booking",
+      },
+      (payload: any) => {
+        console.log("[RT] 📨 Host received INSERT - FULL PAYLOAD:", JSON.stringify(payload, null, 2));
+        console.log("[RT] 🔍 payload.new:", payload.new);
+        console.log("[RT] 🔍 Charger ID:", payload.new?.charger_id);
+        console.log("[RT] 🔍 All keys in payload.new:", Object.keys(payload.new || {}));
+        console.log("[RT] 🔍 My chargers:", hostChargerIds);
 
-          if (!hostChargerIds.includes(payload.new?.charger_id)) {
-            // console.log("[RT] ⏭️ Skipping - not our charger");
-            return;
-          }
-
-          const bookingId = payload.new?.id;
-
+        if (hostChargerIds.includes(payload.new?.charger_id)) {
+          console.log("[RT] ✅ Match! Showing toast");
           dispatch(
             bookingApi.util.invalidateTags([
               { type: "HostBookingList", id: "HOST" },
             ])
           );
-
-          if (isSelfMutated(bookingId)) {
-            // console.log("[RT] ⏭️ Skipping self-mutation");
-            return;
-          }
-
-          if (payload.new?.status === "cancelled") {
-            toast.error("A booking was cancelled by the driver");
-          }
+          toast.success("New booking request received! ⚡");
+        } else {
+          console.log("[RT] ⏭️ Skipping - not our charger");
         }
-      )
-      .subscribe((status) => {
-        // console.log("[RT] Host channel status:", status);
-      });
+      }
+    )
+    .on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "Booking",
+      },
+      (payload: any) => {
+        console.log("[RT] 📨 Host received UPDATE:", payload);
 
-    return () => {
-      // console.log("[RT] 🔌 Host unsubscribing");
-      supabase.removeChannel(channel);
-    };
-  }, [user?.id, user?.role, hostChargerIds, isRealtimeReady, dispatch]);
+        if (!hostChargerIds.includes(payload.new?.charger_id)) {
+          console.log("[RT] ⏭️ Skipping - not our charger");
+          return;
+        }
+
+        const bookingId = payload.new?.id;
+
+        dispatch(
+          bookingApi.util.invalidateTags([
+            { type: "HostBookingList", id: "HOST" },
+          ])
+        );
+
+        if (isSelfMutated(bookingId)) {
+          console.log("[RT] ⏭️ Skipping self-mutation");
+          return;
+        }
+
+        if (payload.new?.status === "cancelled") {
+          toast.error("A booking was cancelled by the driver");
+        }
+      }
+    )
+    .subscribe((status) => {
+      console.log("[RT] Host channel status:", status);
+    });
+
+  return () => {
+    console.log("[RT] 🔌 Host unsubscribing");
+    supabase.removeChannel(channel);
+  };
+}, [user?.id, user?.role, isRealtimeReady, hostChargerIds, dispatch]); // ← Added hostChargerIds here
 
   return <>{children}</>;
 }
