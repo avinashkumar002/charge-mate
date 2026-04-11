@@ -1,0 +1,220 @@
+EVSetu/
+├── .env
+├── .gitignore
+├── eslint.config.mjs
+├── generate-structure.js
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── prisma
+│   ├── migrations
+│   │   ├── 20260317143004_add_lat_lng
+│   │   │   └── migration.sql
+│   │   └── migration_lock.toml
+│   └── schema.prisma
+├── public
+│   ├── a.png
+│   ├── b.png
+│   ├── bg-net.svg
+│   ├── c.png
+│   ├── d.png
+│   ├── e.png
+│   ├── favicon.svg
+│   ├── file.svg
+│   ├── form-bg.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── ok.gif
+│   ├── sitemap.xml
+│   ├── vercel.svg
+│   └── window.svg
+├── README.md
+├── src
+│   ├── app
+│   │   ├── (auth)
+│   │   │   ├── forgot-password
+│   │   │   ├── login
+│   │   │   ├── reset-password
+│   │   │   └── signup
+│   │   ├── (dashboard)
+│   │   │   ├── driver
+│   │   │   ├── host
+│   │   │   └── profile
+│   │   ├── api
+│   │   │   ├── auth
+│   │   │   ├── bookings
+│   │   │   ├── chargers
+│   │   │   ├── imagekit
+│   │   │   ├── send-mail
+│   │   │   ├── submit-waitlist
+│   │   │   └── user
+│   │   ├── cancellation-policy
+│   │   │   └── page.tsx
+│   │   ├── ChargeMate.code-search
+│   │   ├── error.tsx
+│   │   ├── faq
+│   │   │   └── page.tsx
+│   │   ├── favicon.ico
+│   │   ├── features
+│   │   │   └── page.tsx
+│   │   ├── globals.css
+│   │   ├── help-center
+│   │   │   └── page.tsx
+│   │   ├── how-it-works
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── not-found.tsx
+│   │   ├── page.tsx
+│   │   ├── report-concern
+│   │   │   └── page.tsx
+│   │   ├── safety
+│   │   │   └── page.tsx
+│   │   ├── thankyou
+│   │   │   └── page.tsx
+│   │   └── waitlist
+│   │       └── page.tsx
+│   ├── assets
+│   │   ├── images
+│   │   │   ├── device.png
+│   │   │   ├── feature-car.png
+│   │   │   ├── mob.svg
+│   │   │   ├── mobileDown.png
+│   │   │   └── MobileUp.png
+│   │   └── svgs
+│   │       ├── AppStore.tsx
+│   │       ├── arrow.svg
+│   │       ├── BackgroundWave.tsx
+│   │       ├── book-host.svg
+│   │       ├── book.svg
+│   │       ├── calender.svg
+│   │       ├── Car.tsx
+│   │       ├── CarPark.tsx
+│   │       ├── ChevronDown.tsx
+│   │       ├── Comma.tsx
+│   │       ├── dots.svg
+│   │       ├── effortless.svg
+│   │       ├── Effortless.tsx
+│   │       ├── EmailIcon.tsx
+│   │       ├── event.svg
+│   │       ├── FaqCar.tsx
+│   │       ├── feat-car.svg
+│   │       ├── find-bg.svg
+│   │       ├── glass-host.svg
+│   │       ├── glass.svg
+│   │       ├── Guaranteed.tsx
+│   │       ├── paid-host.svg
+│   │       ├── paid.svg
+│   │       ├── parked-car.svg
+│   │       ├── PhoneIcon.tsx
+│   │       ├── PlayStore.tsx
+│   │       ├── ProfileIcon.tsx
+│   │       ├── QrCode.tsx
+│   │       ├── RatingStars.tsx
+│   │       ├── real-time.svg
+│   │       ├── Signin.tsx
+│   │       ├── star.svg
+│   │       ├── Star.tsx
+│   │       ├── tick.svg
+│   │       ├── verifid.svg
+│   │       ├── Verified.tsx
+│   │       └── waitlist-car.svg
+│   ├── components
+│   │   ├── AnimateOnScroll
+│   │   │   └── AnimateOnScroll.tsx
+│   │   ├── BookingCard
+│   │   │   └── BookingCard.tsx
+│   │   ├── Button
+│   │   │   └── Button.tsx
+│   │   ├── ChargerCard
+│   │   │   └── ChargerCard.tsx
+│   │   ├── ChargerListItem
+│   │   │   └── ChargerListItem.tsx
+│   │   ├── Container
+│   │   │   └── Container.tsx
+│   │   ├── Footer
+│   │   │   ├── footer-img
+│   │   │   └── Footer.tsx
+│   │   ├── Header
+│   │   │   ├── AuthButtons.tsx
+│   │   │   ├── header-img
+│   │   │   ├── Header.tsx
+│   │   │   ├── HeaderLogo.tsx
+│   │   │   ├── MobileMenuToggle.tsx
+│   │   │   └── ScrollButton.tsx
+│   │   ├── HostBookingCard
+│   │   │   └── HostBookingCard.tsx
+│   │   ├── ImageUpload
+│   │   │   └── ImageUpload.tsx
+│   │   ├── InputGroup
+│   │   │   └── InputGroup.tsx
+│   │   ├── LocationMap
+│   │   │   ├── LocationMap.tsx
+│   │   │   └── MapDisplay.tsx
+│   │   ├── LocationPicker
+│   │   │   ├── LocationPicker.tsx
+│   │   │   └── MapPicker.tsx
+│   │   ├── molecules
+│   │   │   ├── AnimatedCarSection.tsx
+│   │   │   ├── AvatarGroup.tsx
+│   │   │   ├── EffortCard.tsx
+│   │   │   ├── Faq
+│   │   │   ├── FeatureCards.tsx
+│   │   │   ├── ScrollHandle.tsx
+│   │   │   └── TestimonialCard.tsx
+│   │   ├── ProtectedRoute
+│   │   │   └── ProtectedRoute.tsx
+│   │   ├── RealtimeProvider
+│   │   │   └── RealtimeProvider.tsx
+│   │   ├── ScrollNavLink
+│   │   │   └── ScrollNavLink.tsx
+│   │   ├── SearchFilters
+│   │   │   └── SearchFilters.tsx
+│   │   ├── SelectGroup
+│   │   │   └── SelectGroup.tsx
+│   │   ├── Skeleton
+│   │   │   └── Skeleton.tsx
+│   │   ├── Spinner
+│   │   │   └── Spinner.tsx
+│   │   └── Typography
+│   │       ├── Typography.module.css
+│   │       └── Typography.tsx
+│   ├── hooks
+│   │   ├── useAuth.ts
+│   │   ├── useDebounce.ts
+│   │   ├── useDriverLocation.ts
+│   │   ├── useInView.ts
+│   │   ├── useMediaQuery.tsx
+│   │   └── useScrollTo.tsx
+│   ├── lib
+│   │   ├── auth
+│   │   │   ├── authFetch.ts
+│   │   │   └── protectApi.ts
+│   │   ├── distance.ts
+│   │   ├── prisma
+│   │   │   └── client.ts
+│   │   ├── realtimeUtils.ts
+│   │   └── supabase
+│   │       ├── auth.ts
+│   │       └── client.ts
+│   ├── schemas
+│   │   ├── authSchema.ts
+│   │   ├── bookingSchema.ts
+│   │   ├── chargerSchema.ts
+│   │   └── contactSchema.ts
+│   ├── store
+│   │   ├── hooks.ts
+│   │   ├── services
+│   │   │   ├── baseQuery.ts
+│   │   │   ├── bookingApi.ts
+│   │   │   ├── chargerApi.ts
+│   │   │   └── userApi.ts
+│   │   ├── slices
+│   │   │   └── authSlice.ts
+│   │   ├── store.ts
+│   │   └── StoreProvider.tsx
+│   └── types
+│       ├── booking.ts
+│       └── charger.ts
+└── tsconfig.json
