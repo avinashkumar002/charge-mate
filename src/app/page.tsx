@@ -218,91 +218,257 @@ const WaitlistPage: FC = () => {
             </Suspense>
 
             {/* Hero Section */}
-            <section className="relative">
+            <section className="relative overflow-hidden bg-[#f0fdf4]">
                 <Container>
-                    <div className="flex flex-col gap-6 md:gap-8 py-8 md:py-21 max-w-150 mx-auto ">
-                        <div className="flex flex-col gap-4 md:gap-6">
-                            <div className="flex flex-col gap-2 md:gap-4">
-                                <Typography variant="h1" weight={700} letterSpacing={0.01} className="text-black-900 text-center">
-                                    Find Smart, Reliable EV Charging — Anytime, <span className="text-lime-900"> Anywhere.</span>
-                                </Typography>
-                                <Typography variant="body" weight={400} lineHeight={isMd ? 28 : 24} className="text-black-900 text-center">
-                                    EvSetu connects <b> EV Drivers and Charger Hosts</b> with verified, private EV charging points nearby. No more range anxiety. Save time and power.
+                    <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 py-12 md:py-20">
+
+                        {/* Left Content */}
+                        <div className="flex flex-col gap-6 md:gap-8 flex-1 z-10">
+
+                            {/* Eyebrow chip */}
+                            <div className="w-max py-1.5 px-4 bg-[#365314] rounded-3xl">
+                                <Typography variant="chip" weight={500} lineHeight={20} className="text-[#d9f99d]">
+                                    India's EV Charging Network
                                 </Typography>
                             </div>
-                            <div className="flex gap-2.5 justify-center md:justify-start md:gap-6 flex-wrap">
+
+                            {/* Heading */}
+                            <div className="flex flex-col gap-3">
+                                <Typography
+                                    variant="h1"
+                                    weight={700}
+                                    letterSpacing={0.01}
+                                    className="text-[#0A0A0A]"
+                                >
+                                    Smart EV Charging,{" "}
+                                    <span className="text-[#365314]">Right Where You Are.</span>
+                                </Typography>
+                                <Typography
+                                    variant="body"
+                                    weight={400}
+                                    lineHeight={isMd ? 28 : 24}
+                                    className="text-black-700 max-w-md"
+                                >
+                                    EvSetu connects <b>EV Drivers and Charger Hosts</b> with verified,
+                                    private EV charging points nearby. No more range anxiety. Save time
+                                    and power.
+                                </Typography>
+                            </div>
+
+                            {/* Feature Chips */}
+                            <div className="flex flex-wrap gap-2.5">
                                 <div className="flex gap-2 items-center bg-[#d9f99d] py-1.5 px-4 rounded-3xl">
                                     <Verified />
-                                    <Typography
-                                        variant="chip"
-                                        weight={600}
-                                        lineHeight={20}
-                                        className="text-[#1a2e05]"
-                                    >
+                                    <Typography variant="chip" weight={600} lineHeight={20} className="text-[#1a2e05]">
                                         Verified Spots
                                     </Typography>
                                 </div>
                                 <div className="flex gap-2 items-center bg-[#d9f99d] py-1.5 px-4 rounded-3xl">
                                     <Guaranteed />
-                                    <Typography
-                                        variant="chip"
-                                        weight={600}
-                                        lineHeight={20}
-                                        className="text-[#1a2e05]"
-                                    >
+                                    <Typography variant="chip" weight={600} lineHeight={20} className="text-[#1a2e05]">
                                         Guaranteed Charging
                                     </Typography>
                                 </div>
-
                                 <div className="flex gap-2 items-center bg-[#d9f99d] py-1.5 px-4 rounded-3xl">
                                     <Effortless />
-                                    <Typography
-                                        variant="chip"
-                                        weight={600}
-                                        lineHeight={20}
-                                        className="text-[#1a2e05]"
-                                    >
+                                    <Typography variant="chip" weight={600} lineHeight={20} className="text-[#1a2e05]">
                                         Effortless Earnings
                                     </Typography>
                                 </div>
-
-                            </div>
-                        </div>
-                        <div className="flex flex-col md:flex-row gap-3 md:gap-6 items-center justify-center">
-
-                            <div className="w-full md:w-auto">
-                                <Link href="/signup?role=host">
-                                    <Button
-                                        text="Join as Host"
-                                        variant="lg"
-                                        bg="#365314"
-                                        color="#FFFFFF"
-                                        hoverBg="#101010"
-                                        boxShadow="1px 2px 24px 0px #13245733"
-                                        className="w-full md:w-auto"
-                                    />
-                                </Link>
                             </div>
 
-                            <div className="w-full md:w-auto">
-                                <Link href="/signup?role=driver">
-                                    <Button
-                                        text="Join as Driver"
-                                        variant="lg"
-                                        bg="#d9f99d"
-                                        color="#1a2e05"
-                                        hoverBg="#bef264"
-                                        className="w-full md:w-auto"
-                                    />
-                                </Link>
+                            {/* CTAs */}
+                            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                                <div className="w-full sm:w-auto">
+                                    <Link href="/signup?role=host">
+                                        <Button
+                                            text="Join as Host"
+                                            variant="lg"
+                                            bg="#365314"
+                                            color="#FFFFFF"
+                                            hoverBg="#101010"
+                                            boxShadow="1px 2px 24px 0px #13245733"
+                                            className="w-full"
+                                        />
+                                    </Link>
+                                </div>
+                                <div className="w-full sm:w-auto">
+                                    <Link href="/signup?role=driver">
+                                        <Button
+                                            text="Join as Driver"
+                                            variant="lg"
+                                            bg="#d9f99d"
+                                            color="#1a2e05"
+                                            hoverBg="#bef264"
+                                            className="w-full"
+                                        />
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                        <Typography variant="para" className="text-black-600 text-center">
+
+                            {/* Login */}
+                            <Typography variant="para" className="text-black-600">
                                 Already have an account?{" "}
                                 <Link href="/login" className="text-[#2C7FFF] hover:underline font-semibold">
                                     Login here
                                 </Link>
                             </Typography>
+                        </div>
+
+                        {/* Right — Animated Flow Component */}
+                        <div className="flex-1 w-full lg:max-w-lg">
+                            <div className="flex flex-col gap-3">
+
+                                {/* Two cards + connector row */}
+                                <div className="flex items-stretch gap-3">
+
+                                    {/* Host Card */}
+                                    <div className="flex-1 bg-white border border-[#d9f99d] rounded-2xl p-4 flex flex-col gap-3">
+                                        {/* Card Header */}
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-8 h-8 rounded-xl bg-[#365314] flex items-center justify-center">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d9f99d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p className="text-[13px] font-medium text-[#0A0A0A] leading-none">Host</p>
+                                                <p className="text-[11px] text-black-500 mt-0.5">Charger owner</p>
+                                            </div>
+                                            <div className="ml-auto flex items-center gap-1.5 bg-[#d9f99d] rounded-2xl py-1 px-2.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#365314] animate-pulse" />
+                                                <span className="text-[10px] font-medium text-[#365314]">Active</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Steps */}
+                                        <div className="flex flex-col divide-y divide-[#f0fdf4]">
+                                            {[
+                                                { n: "1", title: "List your charger", sub: "Add details & photos" },
+                                                { n: "2", title: "Set availability & price", sub: "Hours & rate per hour" },
+                                                { n: "3", title: "Accept & earn", sub: "Auto-confirm, get paid", dark: true },
+                                            ].map((s) => (
+                                                <div key={s.n} className="flex items-start gap-2.5 py-2">
+                                                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0 mt-0.5 ${s.dark ? "bg-[#365314] text-[#d9f99d]" : "bg-[#d9f99d] text-[#365314]"}`}>
+                                                        {s.n}
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[12px] font-medium text-[#0A0A0A] leading-tight">{s.title}</p>
+                                                        <p className="text-[11px] text-black-500 leading-tight mt-0.5">{s.sub}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Earnings Tag */}
+                                        <div className="flex items-center gap-2 bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl px-3 py-2">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#65a30d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+                                            </svg>
+                                            <div>
+                                                <p className="text-[12px] font-medium text-[#1a4719] leading-none">₹340 earned today</p>
+                                                <p className="text-[10px] text-[#4d7c0f] mt-0.5">3 sessions completed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Center Connector */}
+                                    <div className="flex flex-col items-center justify-center gap-2 flex-shrink-0 w-12">
+                                        {/* Animated paths SVG */}
+                                        <svg width="48" height="80" viewBox="0 0 48 80" className="overflow-visible">
+                                            <defs>
+                                                <path id="p1" d="M 4,10 C 16,10 32,70 44,70" />
+                                                <path id="p2" d="M 44,10 C 32,10 16,70 4,70" />
+                                            </defs>
+                                            <path d="M 4,10 C 16,10 32,70 44,70" stroke="#65a30d" strokeWidth="1.5" fill="none" strokeDasharray="3 3" opacity="0.45" />
+                                            <path d="M 44,10 C 32,10 16,70 4,70" stroke="#365314" strokeWidth="1.5" fill="none" strokeDasharray="3 3" opacity="0.45" />
+                                            <circle r="4" fill="#65a30d">
+                                                <animateMotion dur="2s" repeatCount="indefinite" begin="0s">
+                                                    <mpath href="#p1" />
+                                                </animateMotion>
+                                            </circle>
+                                            <circle r="4" fill="#bef264" stroke="#365314" strokeWidth="1">
+                                                <animateMotion dur="2s" repeatCount="indefinite" begin="1s">
+                                                    <mpath href="#p2" />
+                                                </animateMotion>
+                                            </circle>
+                                        </svg>
+
+                                        {/* Center Logo Badge */}
+                                        <div className="relative w-10 h-10 rounded-full bg-[#365314] flex items-center justify-center">
+                                            <div className="absolute inset-0 rounded-full border-2 border-[#65a30d] animate-ping opacity-30" />
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                                <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="#bef264" />
+                                            </svg>
+                                        </div>
+
+                                        <p className="text-[9px] text-black-400 text-center leading-tight">live<br />sync</p>
+                                    </div>
+
+                                    {/* Driver Card */}
+                                    <div className="flex-1 bg-white border border-[#bfdbfe] rounded-2xl p-4 flex flex-col gap-3">
+                                        {/* Card Header */}
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-8 h-8 rounded-xl bg-[#bef264] flex items-center justify-center">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a2e05" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="1" y="3" width="15" height="13" rx="2" /><path d="M16 8h4l3 4v4h-7V8z" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p className="text-[13px] font-medium text-[#0A0A0A] leading-none">Driver</p>
+                                                <p className="text-[11px] text-black-500 mt-0.5">EV owner</p>
+                                            </div>
+                                            <div className="ml-auto flex items-center gap-1.5 bg-[#dbeafe] rounded-2xl py-1 px-2.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse" />
+                                                <span className="text-[10px] font-medium text-[#1e40af]">Nearby</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Steps */}
+                                        <div className="flex flex-col divide-y divide-[#eff6ff]">
+                                            {[
+                                                { n: "1", title: "Find nearby chargers", sub: "Live map, verified spots" },
+                                                { n: "2", title: "Book your slot", sub: "Pick time, pay per hour" },
+                                                { n: "3", title: "Plug in & charge", sub: "Navigate, arrive, charge", dark: true },
+                                            ].map((s) => (
+                                                <div key={s.n} className="flex items-start gap-2.5 py-2">
+                                                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0 mt-0.5 ${s.dark ? "bg-[#1e40af] text-white" : "bg-[#dbeafe] text-[#1e40af]"}`}>
+                                                        {s.n}
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[12px] font-medium text-[#0A0A0A] leading-tight">{s.title}</p>
+                                                        <p className="text-[11px] text-black-500 leading-tight mt-0.5">{s.sub}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Booking Tag */}
+                                        <div className="flex items-center gap-2 bg-[#eff6ff] border border-[#bfdbfe] rounded-xl px-3 py-2">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+                                            </svg>
+                                            <div>
+                                                <p className="text-[12px] font-medium text-[#1e3a8a] leading-none">Booked · 2 hrs · ₹180</p>
+                                                <p className="text-[10px] text-[#3b82f6] mt-0.5">Charging in 12 min</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Bottom trust bar */}
+                                <div className="flex items-center justify-center gap-1.5 bg-white border border-[#e5e7eb] rounded-2xl py-2.5 px-4">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#65a30d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg>
+                                    <p className="text-[11px] text-black-500">
+                                        All chargers verified · Payments secured · Real-time sync
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </Container>
             </section>
@@ -487,7 +653,7 @@ const WaitlistPage: FC = () => {
                 </Container>
             </section>
 
-            
+
 
             {/* Key Features */}
             <section id="features-view" className="bg-[#ecfccb] scroll-mt-10">
