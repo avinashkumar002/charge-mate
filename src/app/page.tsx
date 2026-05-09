@@ -46,6 +46,7 @@ import Verified from "@/assets/svgs/Verified";
 import Guaranteed from "@/assets/svgs/Guaranteed";
 import Effortless from "@/assets/svgs/Effortless";
 import Link from "next/link";
+import HowItWorksSnake from "@/components/molecules/HowItWorksSnake";
 
 
 const WaitlistPage: FC = () => {
@@ -349,7 +350,7 @@ const WaitlistPage: FC = () => {
                                                 { n: "3", title: "Accept & earn", sub: "Auto-confirm, get paid", dark: true },
                                             ].map((s) => (
                                                 <div key={s.n} className="flex items-start gap-2.5 py-2">
-                                                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0 mt-0.5 ${s.dark ? "bg-[#365314] text-[#d9f99d]" : "bg-[#d9f99d] text-[#365314]"}`}>
+                                                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium shrink-0 mt-0.5 ${s.dark ? "bg-[#365314] text-[#d9f99d]" : "bg-[#d9f99d] text-[#365314]"}`}>
                                                         {s.n}
                                                     </div>
                                                     <div>
@@ -373,7 +374,7 @@ const WaitlistPage: FC = () => {
                                     </div>
 
                                     {/* Center Connector */}
-                                    <div className="flex flex-col items-center justify-center gap-2 flex-shrink-0 w-12">
+                                    <div className="flex flex-col items-center justify-center gap-2 shrink-0 w-12">
                                         {/* Animated paths SVG */}
                                         <svg width="48" height="80" viewBox="0 0 48 80" className="overflow-visible">
                                             <defs>
@@ -432,7 +433,7 @@ const WaitlistPage: FC = () => {
                                                 { n: "3", title: "Plug in & charge", sub: "Navigate, arrive, charge", dark: true },
                                             ].map((s) => (
                                                 <div key={s.n} className="flex items-start gap-2.5 py-2">
-                                                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0 mt-0.5 ${s.dark ? "bg-[#1e40af] text-white" : "bg-[#dbeafe] text-[#1e40af]"}`}>
+                                                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium shrink-0 mt-0.5 ${s.dark ? "bg-[#1e40af] text-white" : "bg-[#dbeafe] text-[#1e40af]"}`}>
                                                         {s.n}
                                                     </div>
                                                     <div>
@@ -476,9 +477,9 @@ const WaitlistPage: FC = () => {
             {/* How It Works */}
             <section id="how-it-works" className="scroll-mt-15">
                 <Container>
-                    <div className="flex flex-col gap-13 md:gap-15 pt-8 pb-11 md:py-17.5 ">
+                    <div className="flex flex-col gap-12 md:gap-16 pt-8 pb-11 md:py-17.5">
                         {/* Header */}
-                        <div className="flex flex-col justify-between lg:flex-row gap-2 lg:items-end">
+                        <div className="flex flex-col justify-between lg:flex-row gap-4 lg:items-end">
                             <div className="flex flex-col gap-1 md:gap-2">
                                 <div className="w-max py-1.5 px-3 bg-[#d9f99d] backdrop-blur-sm rounded-3xl">
                                     <Typography variant="chip" weight={500} lineHeight={isMd ? 20 : 16} className="text-[#1a2e05]">
@@ -490,13 +491,13 @@ const WaitlistPage: FC = () => {
                                 </Typography>
                             </div>
 
-                            {/* Toggle Buttons */}
+                            {/* Toggle */}
                             <div className="flex gap-1 py-1.5 px-2 md:px-2 md:py-2 rounded-lg bg-[#EFEFEF] w-full md:w-auto">
                                 {(["Driver", "Host"] as const).map((role) => (
                                     <div
                                         key={role}
                                         onClick={() => setActiveRole(role)}
-                                        className={`flex items-center justify-center py-1.5 md:py-2 w-full px-4 rounded-lg cursor-pointer ${activeRole === role ? "bg-black" : ""
+                                        className={`flex items-center justify-center py-1.5 md:py-2 w-full px-4 rounded-lg cursor-pointer transition-colors duration-200 ${activeRole === role ? "bg-black" : ""
                                             }`}
                                     >
                                         <Typography
@@ -512,20 +513,9 @@ const WaitlistPage: FC = () => {
                             </div>
                         </div>
 
-                        {/* Effort Cards    */}
-                        <div className="flex flex-col lg:flex-row lg:justify-around gap-10.5 lg:gap-8 md:bg-[url('/bg-net.svg')] bg-none bg-contain md:bg-cover bg-center bg-no-repeat">
-                            {data[activeRole].map((card) => (
-                                <EffortCard
-                                    key={card.number}
-                                    number={card.number}
-                                    bgColor={card.bgColor}
-                                    icon={card.icon}
-                                    title={card.title}
-                                    subtitle={card.subtitle}
-                                    animationKey={`${activeRole}-${card.number}`} // This triggers the animation
-                                />
-                            ))}
-                        </div>
+                        {/* Snake Timeline */}
+                        <HowItWorksSnake data={data} activeRole={activeRole} />
+
                     </div>
                 </Container>
             </section>
