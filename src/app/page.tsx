@@ -7,8 +7,8 @@ import Typography from "@/components/Typography/Typography";
 import { FC, useState, Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
+// import "swiper/css";
+// import "swiper/css/pagination";
 import Image from "next/image";
 import Button from "@/components/Button/Button";
 import glass from "@/assets/svgs/glass.svg"
@@ -47,6 +47,7 @@ import Guaranteed from "@/assets/svgs/Guaranteed";
 import Effortless from "@/assets/svgs/Effortless";
 import Link from "next/link";
 import HowItWorksSnake from "@/components/molecules/HowItWorksSnake";
+import TestimonialsBook from "@/components/molecules/TestimonialsBook";
 
 
 const WaitlistPage: FC = () => {
@@ -145,57 +146,6 @@ const WaitlistPage: FC = () => {
             chipText: "Event Optimized",
             chipIcon: star,
             chipIconBg: true,
-        },
-    ];
-
-    const items = [
-        {
-            id: 1,
-            stars: 5,
-            title: "“Reliable Charging Right When I Needed It.”",
-            comment:
-                "I was low on battery and needed a charger near my office. I booked a nearby home charger in minutes. Smooth experience, clear directions, and no waiting time at all.",
-            author: "– Sarah M., EV Driver",
-        },
-        {
-            id: 2,
-            stars: 5,
-            title: "“Earning from My Home Charger Was Effortless.”",
-            comment:
-                "I had an EV charger sitting idle most of the day. Listing it as a host was simple, and now I earn passive income while helping other EV drivers charge conveniently.",
-            author: "– Mark K., Charger Host",
-        },
-        {
-            id: 3,
-            stars: 4,
-            title: "“Perfect for Long Trips and City Driving.”",
-            comment:
-                "Public charging stations are often crowded. Booking a private charger ahead of time gives me peace of mind, especially during long drives or busy days.",
-            author: "– Daniel P., EV Owner",
-        },
-        {
-            id: 4,
-            stars: 5,
-            title: "“Safe, Secure, and Well-Maintained Chargers.”",
-            comment:
-                "As a driver, I appreciate knowing exactly where I’m charging and what type of charger I’ll get. Every booking so far has been smooth and reliable.",
-            author: "– Emily R., Daily EV Commuter",
-        },
-        {
-            id: 5,
-            stars: 4,
-            title: "“Great Way to Support the EV Community.”",
-            comment:
-                "Hosting a charger feels good. I’m helping other EV users while covering my electricity costs and more. The platform handles everything.",
-            author: "– James L., Home Charger Host",
-        },
-        {
-            id: 6,
-            stars: 5,
-            title: "“No More Range Anxiety.”",
-            comment:
-                "Being able to book chargers in advance has completely changed how I plan my trips. Charging is predictable, affordable, and stress-free.",
-            author: "– Olivia T., EV Road Tripper",
         },
     ];
 
@@ -521,123 +471,50 @@ const WaitlistPage: FC = () => {
             </section>
 
             {/* Our Happy Customers */}
-            <section className="bg-[#ecfccb] overflow-hidden">
-                <Container pl="pl-6" pr="pr-0">
-                    <div className="pt-4 md:pt-8 pb-8 md:pb-17.5 ">
-                        <div className="flex flex-col gap-6 overflow-hidden">
-                            <div className="flex flex-col gap-2 items-center mr-6">
+            <section className="bg-[#f0fdf4] overflow-hidden">
+                <Container>
+                    <div className="pt-4 md:pt-8 pb-8 md:pb-17.5">
+                        <div className="flex flex-col gap-6 md:gap-10">
+
+                            {/* Header */}
+                            <div className="flex flex-col gap-2 items-center">
                                 <div className="w-max py-1.5 px-3 bg-[#d9f99d] backdrop-blur-sm rounded-3xl">
                                     <Typography variant="chip" weight={500} lineHeight={isMd ? 20 : 16} className="text-[#1a2e05]">
                                         TESTIMONIALS
                                     </Typography>
                                 </div>
-                                <Typography
-                                    variant="h2"
-                                    weight={600}
-                                    lineHeight={isMd ? 45 : 36}
-                                    className="text-[#0A0A0A]"
-                                >
+                                <Typography variant="h2" weight={600} lineHeight={isMd ? 45 : 36} className="text-[#0A0A0A]">
                                     Trusted by EV Drivers & Hosts
                                 </Typography>
                             </div>
 
-                            <div className="w-full mt-2 md:mt-9">
-                                <Swiper
-                                    className="testimonial-swiper overflow-visible!"
-                                    modules={[Pagination, Autoplay]}
-                                    slidesPerView={3}
-                                    slidesPerGroup={1}
-                                    centeredSlides={true}
-                                    spaceBetween={30}
-                                    loop={true}
-                                    autoplay={{
-                                        delay: 3000,
-                                        disableOnInteraction: false,
-                                    }}
-                                    pagination={{
-                                        clickable: true,
-                                        el: ".testimonials-pagination",
-                                    }}
-                                    breakpoints={{
-                                        0: {
-                                            slidesPerView: 1.2,
-                                            slidesPerGroup: 1,
-                                            spaceBetween: 12,
-                                            centeredSlides: false,
-                                        },
-                                        640: {
-                                            slidesPerView: 2,
-                                            slidesPerGroup: 1,
-                                            spaceBetween: 16,
-                                            centeredSlides: true,
-                                        },
-                                        768: {
-                                            slidesPerView: 3,
-                                            slidesPerGroup: 1,
-                                            spaceBetween: 24,
-                                            centeredSlides: true,
-                                        },
-                                    }}
-                                >
-                                    {items.map((item) => (
-                                        <SwiperSlide key={item.id}>
-                                            <div className="slide-inner flex justify-center">
-                                                <TestimonialCard
-                                                    stars={item.stars}
-                                                    title={item.title}
-                                                    comment={item.comment}
-                                                    author={item.author}
-                                                />
-                                            </div>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
+                            {/* Book */}
+                            <TestimonialsBook />
 
-                                <div className="testimonials-pagination flex justify-center gap-2 mt-3 md:mt-8"></div>
-                            </div>
-
-                            <div className="flex gap-8 mr-6 justify-center">
+                            {/* Rating row — identical to original */}
+                            <div className="flex gap-8 justify-center">
                                 <div className="hidden lg:flex items-center w-full">
-                                    <div className="border-2 border-solid border-[#365314] w-full h-px"></div>
+                                    <div className="border-2 border-solid border-[#365314] w-full h-px" />
                                 </div>
-
                                 <div className="flex gap-3 items-center">
-                                    <AvatarGroup
-                                        images={[
-                                            "/e.png",
-                                            "/d.png",
-                                            "/c.png",
-                                            "/b.png",
-                                            "/a.png",
-                                        ]}
-                                    />
+                                    <AvatarGroup images={["/e.png", "/d.png", "/c.png", "/b.png", "/a.png"]} />
                                     <div className="flex flex-col">
                                         <div className="flex gap-2 items-center">
                                             <RatingStars />
-                                            <Typography
-                                                variant="para"
-                                                weight={600}
-                                                lineHeight={isMd ? 24 : 20}
-                                                className="text-[#132457]"
-                                            >
+                                            <Typography variant="para" weight={600} lineHeight={isMd ? 24 : 20} className="text-[#132457]">
                                                 4.9 / 5
                                             </Typography>
                                         </div>
-                                        <Typography
-                                            variant="body"
-                                            weight={400}
-                                            lineHeight={isMd ? 24 : 20}
-                                            className="text-black-900 whitespace-nowrap"
-                                        >
+                                        <Typography variant="body" weight={400} lineHeight={isMd ? 24 : 20} className="text-black-900 whitespace-nowrap">
                                             Based on 3,000+ reviews
                                         </Typography>
                                     </div>
                                 </div>
-
                                 <div className="hidden lg:flex items-center w-full">
-                                    <div className="border-2 border-solid border-[#365314] w-full h-px"></div>
+                                    <div className="border-2 border-solid border-[#365314] w-full h-px" />
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </Container>
